@@ -1,41 +1,87 @@
 // =========================================================================
-// DesktopIcon.jsx — desktop icon, organic positioning, contributor badge
+// DesktopIcon.jsx — draggable desktop icon with contributor badge
+// Drag: mousedown → move > 5px → free drag; mouseup → save position
+// Click: first click selects, second click on selected opens
+// Double-click: always opens
 // =========================================================================
 
-function DesktopIcon({ project, selected, onSelect, onOpen }) {
-  // position is { x, y } in px relative to viewport center. Falls back to
-  // the original CSS left/top format if present.
-  const style = project.position && typeof project.position.x === 'number'
-    ? {
-        left: `calc(50% + ${project.position.x}px - 42px)`,
-        top:  `calc(50% + ${project.position.y}px - 50px)`,
-      }
-    : {
-        left: project.position?.left,
-        top:  project.position?.top,
-      };
+function DesktopIcon({ project, position, selected, onSelect, onOpen, onPositionChange }) {
+  const [dragPos, setDragPos] = React.useState(null);
+  const drag = React.useRef({ active: false, startX: 0, startY: 0, origX: 0, origY: 0, hasMoved: false });
 
+  const currentPos = dragPos || position || { x: 0, y: 0 };
+  const isDragging = !!dragPos;
   const isContrib = project.role === 'Contributor';
+
+  function handleMouseDown(e) {
+    if (e.button !== 0) return;
+    e.stopPropagation();
+    e.preventDefault();
+
+    const wasSelected = selected;
+    const orig = position || { x: 0, y: 0 };
+
+    drag.current = {
+      active: true,
+      startX: e.clientX,
+      startY: e.clientY,
+      origX: orig.x,
+      origY: orig.y,
+      hasMoved: false,
+    };
+
+    onSelect && onSelect(project.id);
+
+    function onMove(ev) {
+      if (!drag.current.active) return;
+      const dx = ev.clientX - drag.current.startX;
+      const dy = ev.clientY - drag.current.startY;
+      if (!drag.current.hasMoved && Math.hypot(dx, dy) < 5) return;
+      drag.current.hasMoved = true;
+      setDragPos({ x: drag.current.origX + dx, y: drag.current.origY + dy });
+    }
+
+    function onUp(ev) {
+      if (!drag.current.active) return;
+      drag.current.active = false;
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+
+      if (drag.current.hasMoved) {
+        const dx = ev.clientX - drag.current.startX;
+        const dy = ev.clientY - drag.current.startY;
+        const newPos = { x: drag.current.origX + dx, y: drag.current.origY + dy };
+        setDragPos(null);
+        onPositionChange && onPositionChange(project.id, newPos);
+      } else {
+        setDragPos(null);
+        if (wasSelected) onOpen && onOpen(project);
+      }
+    }
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  }
+
+  function handleDoubleClick(e) {
+    e.stopPropagation();
+    onOpen && onOpen(project);
+  }
 
   return (
     <div
       className={`d-icon ${selected ? 'selected' : ''}`}
-      style={style}
-      onMouseDown={(e) => {
-        e.stopPropagation();
-        onSelect && onSelect(project.id);
+      style={{
+        left: `calc(50% + ${currentPos.x}px - 42px)`,
+        top:  `calc(50% + ${currentPos.y}px - 50px)`,
+        cursor: isDragging ? 'grabbing' : 'default',
+        zIndex: isDragging ? 999 : undefined,
+        transform: isDragging ? 'scale(1.08)' : undefined,
+        filter: isDragging ? 'brightness(1.12)' : undefined,
+        transition: isDragging ? 'none' : undefined,
       }}
-      onClick={(e) => {
-        // single click on already-selected → open (closer to mobile-friendly)
-        if (selected) {
-          e.stopPropagation();
-          onOpen && onOpen(project);
-        }
-      }}
-      onDoubleClick={(e) => {
-        e.stopPropagation();
-        onOpen && onOpen(project);
-      }}
+      onMouseDown={handleMouseDown}
+      onDoubleClick={handleDoubleClick}
       title={project.tagline || project.name}
     >
       <div className="d-icon-img-wrap">

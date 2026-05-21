@@ -5,11 +5,19 @@
 
 function Desktop() {
   const [intro, setIntro] = React.useState(() => {
-    // Show intro once per session
     return sessionStorage.getItem('introSeen') !== '1';
   });
   const [selected, setSelected] = React.useState(null);
   const [windows, setWindows] = React.useState([]);
+  const [iconPositions, setIconPositions] = React.useState(() => {
+    const map = {};
+    (window.PROJECTS || []).forEach(p => { map[p.id] = p.position || { x: 0, y: 0 }; });
+    return map;
+  });
+
+  function onIconPositionChange(id, pos) {
+    setIconPositions(prev => ({ ...prev, [id]: pos }));
+  }
   const [zCounter, setZCounter] = React.useState(10);
   const [spotOpen, setSpotOpen] = React.useState(false);
   const [spotFilter, setSpotFilter] = React.useState(null);
@@ -233,9 +241,11 @@ function Desktop() {
             <DesktopIcon
               key={p.id}
               project={p}
+              position={iconPositions[p.id]}
               selected={selected === p.id}
               onSelect={setSelected}
               onOpen={(proj) => openItem({ kind: 'project', _ref: proj })}
+              onPositionChange={onIconPositionChange}
             />
           ))}
         </div>
