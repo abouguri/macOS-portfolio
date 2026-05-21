@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="pbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3da8ff"></stop>
+      <stop offset="1" stop-color="#0a64d9"></stop>
+    </linearGradient>
+    <linearGradient id="ftab" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6cc3ff"></stop>
+      <stop offset="1" stop-color="#2a8df2"></stop>
+    </linearGradient>
+    <linearGradient id="fmain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9bd1ff"></stop>
+      <stop offset="1" stop-color="#3d9cef"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#pbg)"></rect>
+  
+  <path d="M 180 320 Q 180 280 220 280 H 420 L 478 332 H 804 Q 844 332 844 372 V 720 Q 844 760 804 760 H 220 Q 180 760 180 720 Z" fill="url(#ftab)"></path>
+  
+  <path d="M 180 396 Q 180 360 220 360 H 804 Q 844 360 844 396 V 728 Q 844 768 804 768 H 220 Q 180 768 180 728 Z" fill="url(#fmain)"></path>
+  
+  <path d="M 200 396 Q 200 380 220 380 H 804 Q 824 380 824 396" stroke="rgba(255,255,255,0.5)" stroke-width="3" fill="none"></path>
+</svg>
