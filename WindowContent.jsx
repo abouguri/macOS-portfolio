@@ -185,7 +185,7 @@ function ContactWindowContent() {
     <div className="cw-root">
       <h2 className="cw-title">Get in touch</h2>
       <p className="cw-sub">
-        Best by email — I read everything and reply within a few days. For code, GitHub. For talking shop, LinkedIn.
+        Email is best. I read everything and usually reply within a few days. For code stuff, GitHub. For professional things, LinkedIn.
       </p>
       <div className="cw-list">
         {rows.map((r) => (

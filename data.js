@@ -12,7 +12,7 @@ window.ABOUT = {
   github: "https://github.com/abouguri",
   linkedin: "https://www.linkedin.com/in/abdelaadim-bougurine",
   bio:
-    "Systems-leaning engineer comfortable from C++ network servers and 3D raycasters up to Next.js LLM products. I like projects that touch the metal — and ship a polished surface.",
+    "I build things at most levels of the stack, from C++ servers and raycasters to Next.js apps with LLMs. I like projects that get close to the hardware but still ship something clean.",
 };
 
 window.PROJECTS = [
@@ -31,19 +31,19 @@ window.PROJECTS = [
     icon: "assets/icons/projects/quanta.svg",
     position: { x: -420, y: -180 },
     images: [
-      { c: "linear-gradient(135deg,#0d1f2d 0%,#1b3a52 100%)", label: "Landing — paste a URL" },
+      { c: "linear-gradient(135deg,#0d1f2d 0%,#1b3a52 100%)", label: "Landing screen" },
       { c: "linear-gradient(150deg,#13283a 0%,#264f73 100%)", label: "Analysis result · 78 / 100" },
     ],
     what:
-      "Paste a URL or article text and Quanta runs a four-pass LLM review — fact risk, bias & framing, sensationalism, red flags — then returns a calibrated 0–100 credibility score with a written explanation. History is stored locally, output is copy-as-markdown, with dark/light mode and EN + AR.",
+      "You paste a URL or some article text and it runs four separate LLM checks: fact risk, bias and framing, sensationalism, and red flags. Each check is independent and you get a 0 to 100 score with a written breakdown. History is saved locally, you can copy the output as markdown, and it works in both English and Arabic.",
     why:
-      "The model wrapping is the trick. Splitting a single credibility judgment across four orthogonal passes prevents the score from being dominated by any one failure mode. Server-side scraping with Cheerio, edge-deployed on Vercel; single-call latency is dominated by Groq's llama-3.3-70b throughput.",
+      "Running four separate checks instead of one big prompt is the key part. If you lump everything into one call, one bad signal can drag the whole score down. Keeping them separate means each check stays honest. Scraping runs server-side with Cheerio, the whole thing is deployed on Vercel, and speed is mostly just Groq being fast.",
   },
   {
     id: "inception",
     slug: "inception",
     name: "Inception",
-    tagline: "A full containerized web stack — NGINX, WordPress, MariaDB, Adminer — orchestrated from scratch.",
+    tagline: "A full containerized web stack (NGINX, WordPress, MariaDB, Adminer) built from scratch with no pre-built images.",
     role: "Author",
     year: "2025",
     type: "DevOps",
@@ -56,15 +56,15 @@ window.PROJECTS = [
       { c: "linear-gradient(150deg,#1c2731 0%,#34495f 100%)", label: "Portfolio sub-site · dark" },
     ],
     what:
-      "Five Docker containers — NGINX with TLS termination + reverse proxy, WordPress + PHP-FPM, MariaDB, Adminer, and a static portfolio site — on a custom bridge network with persistent volumes, all built from debian:bullseye. No pre-built images, no latest tags.",
+      "Five Docker containers: NGINX (TLS + reverse proxy), WordPress + PHP-FPM, MariaDB, Adminer, and a static portfolio site. All on a custom bridge network with persistent volumes, all built from debian:bullseye. No pre-built images, no latest tags.",
     why:
-      "A 1337/42 capstone, but I went past the brief: self-signed TLS with HSTS/CSP, a Mermaid-documented service topology, and a dark/light themed bonus portfolio served from its own container. A demonstration that I read the spec, then asked what the spec was really for.",
+      "It started as a 1337/42 school project but I did more than what was asked. Added self-signed TLS with HSTS and CSP headers, documented the whole service topology with Mermaid, and built a dark/light themed portfolio site in its own container. I try to understand why a spec exists before I just follow it.",
   },
   {
     id: "cub3d",
     slug: "cub3d",
     name: "cub3D",
-    tagline: "A Wolfenstein-style raycasting engine in C — with enemy AI, health, and a minimap.",
+    tagline: "A Wolfenstein-style raycasting engine in C, with enemy AI, a health system, and a minimap.",
     role: "Author",
     year: "2024",
     type: "Game Engine",
@@ -85,7 +85,7 @@ window.PROJECTS = [
     id: "geobrief",
     slug: "geobrief",
     name: "GEObrief",
-    tagline: "Lightweight geospatial briefing tool — point at a place, get a structured summary.",
+    tagline: "A lightweight geospatial briefing tool. Point at a place on the map, get a quick structured summary.",
     role: "Author",
     year: "2025",
     type: "Geo · AI",
@@ -98,9 +98,9 @@ window.PROJECTS = [
       { c: "linear-gradient(160deg,#102a1f 0%,#1f4533 100%)", label: "Briefing card" },
     ],
     what:
-      "TODO — paste the real summary from the README. Keep the same shape as the others: what it does, why it's interesting, the deployed/repo links.",
+      "TODO: paste the real summary from the README. Same shape as the others: what it does, why it's interesting, links.",
     why:
-      "TODO — fill in the angle that makes this project sit alongside the rest. Tweak this paragraph from the Tweaks panel once the README copy is finalised.",
+      "TODO: fill in what makes this project interesting. Update once the README copy is ready.",
     todo: true,
   },
 
@@ -110,7 +110,7 @@ window.PROJECTS = [
     slug: "transcendence",
     name: "Transcendence",
     tagline:
-      "Real-time multiplayer Pong on an event-driven microservices stack — under 30s from load to a fair online match.",
+      "Real-time multiplayer Pong on an event-driven microservices stack. Under 30 seconds from page load to an actual online match.",
     role: "Contributor",
     year: "2025",
     type: "Microservices",
@@ -130,16 +130,16 @@ window.PROJECTS = [
     what:
       "Real-time multiplayer Pong as event-driven microservices. An API Gateway fans out to four services (user, game, chat, tournament), all communicating asynchronously over RabbitMQ. Secrets in HashiCorp Vault, ModSecurity WAF at the edge, 2FA + JWT auth, SQLite per service, Redis for sessions. Goal: under 30 seconds from page load to a fair online match.",
     contributions:
-      "TODO — one paragraph in your own words. Which service(s) did you own? Which integration events crossed the bus through your code? If you wired Vault, the WAF, or a specific domain (user / game / chat / tournament), name it. Be specific — credit is for the work that's actually yours.",
+      "TODO: one paragraph in your own words. Which service(s) did you own? Which integration events went through your code? If you wired Vault, the WAF, or a specific domain (user / game / chat / tournament), say so. Be specific.",
     why:
-      "Real Hexagonal Architecture across five services with proper domain / application / infrastructure separation, plus a working integration-event bus — not architecture-diagram theatre. Vault integration means zero secrets in env files or git history.",
+      "It uses proper Hexagonal Architecture across five services with clean domain/application/infrastructure separation, and the integration-event bus actually works in production, not just on a diagram. Vault means no secrets end up in env files or git.",
   },
   {
     id: "ircserver",
     slug: "irc-server",
     name: "IRC Server",
     tagline:
-      "A from-scratch IRC server in C++ using the Reactor pattern over epoll — multi-client, channels, ops, the lot.",
+      "A from-scratch IRC server in C++ using the Reactor pattern over epoll. Multi-client, channels, ops, all of it.",
     role: "Contributor",
     year: "2024",
     type: "Systems",
@@ -152,11 +152,11 @@ window.PROJECTS = [
       { c: "linear-gradient(150deg,#11171c 0%,#1f2a34 100%)", label: "Reactor · dispatcher sketch" },
     ],
     what:
-      "RFC-style IRC server in C++. A single-threaded epoll-driven Reactor multiplexes all client sockets; a Dispatcher routes parsed messages to per-command handlers (PASS, NICK, USER, JOIN, PRIVMSG, PART, QUIT, LIST, KICK, INVITE, MODE, PING). Channel ops, invites, modes — all there. Numeric reply templates configurable in config/numericReplies.txt.",
+      "An RFC-style IRC server in C++. A single-threaded epoll-driven Reactor handles all client sockets and a Dispatcher routes parsed messages to per-command handlers (PASS, NICK, USER, JOIN, PRIVMSG, PART, QUIT, LIST, KICK, INVITE, MODE, PING). Channel ops, invites, and modes all work. Numeric reply templates are configurable in config/numericReplies.txt.",
     contributions:
-      "TODO — one paragraph. Which commands and handlers did you own (channel ops, PRIVMSG routing, mode logic)? Did you write the parser, the dispatcher, or the connection lifecycle? Replace this with a specific list.",
+      "TODO: one paragraph. Which commands and handlers did you own? Did you write the parser, the dispatcher, or the connection lifecycle? Replace this with specifics.",
     why:
-      "Clean application of Reactor + Dispatcher with a Factory for command handlers and Singletons for Server / Reactor. Tested live against nc, irssi, weechat, and HexChat — the parts of UNIX that don't lie.",
+      "Good clean use of Reactor + Dispatcher, with a Factory for command handlers and Singletons for Server and Reactor. Tested live against nc, irssi, weechat, and HexChat. If it works with all of those it actually works.",
   },
 ];
 
