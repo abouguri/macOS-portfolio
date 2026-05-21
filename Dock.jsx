@@ -1,95 +1,125 @@
 // =========================================================================
-// Dock.jsx — glass dock with authentic macOS cosine magnification
-// Based on 21st.dev mac-os-dock component (adapted for vanilla JSX/Babel)
-// Uses a rAF animation loop with lerp for smooth spring-like motion.
+// Dock.jsx — authentic macOS cosine magnification, GPU-smooth
+//
+// The animation loop writes directly to DOM via iconRefs — no setState
+// on every frame. React only re-renders for hover (tooltip) changes.
+// useLayoutEffect sets initial geometry before first paint (no flash).
 // =========================================================================
 
 function Dock({ apps, onAppClick, openIds = [] }) {
-  const [currentScales, setCurrentScales] = React.useState(() => apps.map(() => 1));
-  const [currentPositions, setCurrentPositions] = React.useState([]);
   const [hovered, setHovered] = React.useState(null);
 
-  const dockRef = React.useRef(null);
-  const iconRefs = React.useRef([]);
-  const mouseXRef = React.useRef(null);
-  const configRef = React.useRef(null);
-  const lastMoveTime = React.useRef(0);
+  const wrapRef     = React.useRef(null);   // the glass pill
+  const innerRef    = React.useRef(null);   // relative icon container
+  const iconRefs    = React.useRef([]);
+  const mouseXRef   = React.useRef(null);
+  const configRef   = React.useRef(null);
+  const lastMove    = React.useRef(0);
 
-  // ── Responsive config ────────────────────────────────────────────────
+  // ── Config (responsive) ──────────────────────────────────────────────
   function computeConfig() {
     const dim = Math.min(window.innerWidth, window.innerHeight);
-    if (dim < 480)  return { baseIconSize: Math.max(40, dim * 0.08), maxScale: 1.4, effectWidth: dim * 0.40 };
-    if (dim < 768)  return { baseIconSize: Math.max(48, dim * 0.07), maxScale: 1.5, effectWidth: dim * 0.35 };
-    if (dim < 1024) return { baseIconSize: Math.max(56, dim * 0.06), maxScale: 1.6, effectWidth: dim * 0.30 };
-    return { baseIconSize: Math.max(64, Math.min(80, dim * 0.05)), maxScale: 1.8, effectWidth: 300 };
+    if (dim < 480)  return { base: Math.max(40, dim * 0.08), maxScale: 1.4, fx: dim * 0.40 };
+    if (dim < 768)  return { base: Math.max(48, dim * 0.07), maxScale: 1.5, fx: dim * 0.35 };
+    if (dim < 1024) return { base: Math.max(56, dim * 0.06), maxScale: 1.6, fx: dim * 0.30 };
+    return { base: Math.max(64, Math.min(80, dim * 0.05)), maxScale: 1.8, fx: 300 };
   }
 
-  const [config, setConfig] = React.useState(computeConfig);
-  React.useEffect(() => { configRef.current = config; }, [config]);
+  function sp(base) { return Math.max(4, base * 0.08); }
+  function pad(base) { return Math.max(8, base * 0.12); }
+
+  // ── Set geometry before first paint ──────────────────────────────────
+  React.useLayoutEffect(() => {
+    const cfg = computeConfig();
+    configRef.current = cfg;
+    const { base } = cfg;
+    const spacing = sp(base);
+    const padding = pad(base);
+
+    let x = 0;
+    apps.forEach((_, i) => {
+      const el = iconRefs.current[i];
+      if (!el) return;
+      el.style.left   = `${x}px`;
+      el.style.width  = `${base}px`;
+      el.style.height = `${base}px`;
+      x += base + spacing;
+    });
+
+    const totalW = x - spacing;
+    if (innerRef.current) innerRef.current.style.height = `${base}px`;
+    if (wrapRef.current)  wrapRef.current.style.width   = `${totalW + padding * 2}px`;
+  }, [apps.length]);
+
+  // ── Resize handler ───────────────────────────────────────────────────
   React.useEffect(() => {
     configRef.current = computeConfig();
-    const onResize = () => setConfig(computeConfig());
+    function onResize() { configRef.current = computeConfig(); }
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // ── Animation loop (runs once, reads config via ref) ─────────────────
+  // ── Animation loop — pure DOM mutation, zero setState ────────────────
   React.useEffect(() => {
     const n = apps.length;
-    const scales = apps.map(() => 1.0);
-
-    function spacing(iconSize) { return Math.max(4, iconSize * 0.08); }
-
-    function targetScale(index, mX) {
-      const { baseIconSize, maxScale, effectWidth } = configRef.current || computeConfig();
-      const sp = spacing(baseIconSize);
-      if (mX === null) return 1.0;
-      const center = index * (baseIconSize + sp) + baseIconSize / 2;
-      const lo = mX - effectWidth / 2;
-      const hi = mX + effectWidth / 2;
-      if (center < lo || center > hi) return 1.0;
-      const theta = ((center - lo) / effectWidth) * 2 * Math.PI;
-      return 1.0 + ((1 - Math.cos(theta)) / 2) * (maxScale - 1.0);
-    }
-
-    function calcPositions(s) {
-      const { baseIconSize } = configRef.current || computeConfig();
-      const sp = spacing(baseIconSize);
-      let x = 0;
-      return s.map(sc => {
-        const w = baseIconSize * sc;
-        const c = x + w / 2;
-        x += w + sp;
-        return c;
-      });
-    }
+    const scales = new Float32Array(n).fill(1.0);
 
     let rafId;
     function animate() {
-      const mX = mouseXRef.current;
-      const lerp = mX !== null ? 0.2 : 0.12;
+      const { base, maxScale, fx } = configRef.current || computeConfig();
+      const spacing = sp(base);
+      const padding = pad(base);
+      const mX  = mouseXRef.current;
+      const lerp = mX !== null ? 0.20 : 0.10;
+
+      let x = 0;
       for (let i = 0; i < n; i++) {
-        scales[i] += (targetScale(i, mX) - scales[i]) * lerp;
+        // Target scale — cosine curve, based on resting (un-magnified) centers
+        let target = 1.0;
+        if (mX !== null) {
+          const center = i * (base + spacing) + base / 2;
+          const lo = mX - fx / 2;
+          const hi = mX + fx / 2;
+          if (center >= lo && center <= hi) {
+            const theta = ((center - lo) / fx) * 2 * Math.PI;
+            target = 1.0 + ((1 - Math.cos(theta)) / 2) * (maxScale - 1.0);
+          }
+        }
+
+        scales[i] += (target - scales[i]) * lerp;
+        const sc = scales[i];
+        const w  = base * sc;
+
+        const el = iconRefs.current[i];
+        if (el) {
+          el.style.left   = `${x}px`;
+          el.style.width  = `${w}px`;
+          el.style.height = `${w}px`;
+          el.style.zIndex = (sc * 10) | 0;
+        }
+        x += w + spacing;
       }
-      const positions = calcPositions(scales);
-      setCurrentScales([...scales]);
-      setCurrentPositions([...positions]);
+
+      // Resize the pill to fit magnified icons
+      const totalW = x - spacing;
+      if (wrapRef.current) wrapRef.current.style.width = `${totalW + padding * 2}px`;
+
       rafId = requestAnimationFrame(animate);
     }
 
     rafId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafId);
-  }, [apps.length]); // eslint-disable-line
+  }, [apps.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Mouse tracking ───────────────────────────────────────────────────
+  // ── Mouse handlers ───────────────────────────────────────────────────
   function handleMouseMove(e) {
     const now = performance.now();
-    if (now - lastMoveTime.current < 16) return;
-    lastMoveTime.current = now;
-    if (!dockRef.current) return;
-    const rect = dockRef.current.getBoundingClientRect();
-    const pad = Math.max(8, config.baseIconSize * 0.12);
-    mouseXRef.current = e.clientX - rect.left - pad;
+    if (now - lastMove.current < 8) return;   // ~120 fps cap
+    lastMove.current = now;
+    if (!wrapRef.current) return;
+    const rect    = wrapRef.current.getBoundingClientRect();
+    const padding = pad(configRef.current?.base || 64);
+    mouseXRef.current = e.clientX - rect.left - padding;
   }
 
   function handleMouseLeave() {
@@ -98,42 +128,39 @@ function Dock({ apps, onAppClick, openIds = [] }) {
   }
 
   // ── Bounce on click ──────────────────────────────────────────────────
-  function handleClick(app, index) {
-    const el = iconRefs.current[index];
+  function handleClick(app, i) {
+    const el = iconRefs.current[i];
     if (el) {
-      const h = -(config.baseIconSize * 0.15);
-      el.style.transition = 'transform 0.18s ease-out';
-      el.style.transform = `translateY(${h}px)`;
-      setTimeout(() => { el.style.transition = 'transform 0.18s ease-out'; el.style.transform = 'translateY(0)'; }, 180);
+      const h = -((configRef.current?.base || 64) * 0.15);
+      el.style.transition = 'transform 0.15s cubic-bezier(0.32,0.72,0,1)';
+      el.style.transform  = `translateY(${h}px)`;
+      setTimeout(() => {
+        el.style.transform = 'translateY(0)';
+        setTimeout(() => { el.style.transition = ''; }, 150);
+      }, 150);
     }
     onAppClick && onAppClick(app);
   }
 
-  // ── Layout math ──────────────────────────────────────────────────────
-  const { baseIconSize } = config;
-  const pad = Math.max(8, baseIconSize * 0.12);
-  const contentWidth = currentPositions.length > 0
-    ? Math.max(...currentPositions.map((p, i) => p + (baseIconSize * (currentScales[i] || 1)) / 2))
-    : apps.length * (baseIconSize + Math.max(4, baseIconSize * 0.08));
-  const radius = Math.max(16, baseIconSize * 0.35);
+  // ── Static layout values for JSX (animation loop takes over at runtime) ──
+  const cfg     = configRef.current || computeConfig();
+  const base    = cfg.base;
+  const padding = pad(base);
+  const radius  = Math.max(16, base * 0.35);
+  const initW   = apps.length * (base + sp(base)) - sp(base);
 
   return (
     <div style={{
-      position: 'fixed',
-      bottom: 24,
-      left: 0,
-      right: 0,
-      display: 'flex',
-      justifyContent: 'center',
-      zIndex: 50,
-      pointerEvents: 'none',
+      position: 'fixed', bottom: 24, left: 0, right: 0,
+      display: 'flex', justifyContent: 'center',
+      zIndex: 50, pointerEvents: 'none',
     }}>
       <div
-        ref={dockRef}
+        ref={wrapRef}
         style={{
           pointerEvents: 'auto',
-          width: `${contentWidth + pad * 2}px`,
-          padding: `${pad}px`,
+          width: `${initW + padding * 2}px`,      /* rAF updates this */
+          padding: `${padding}px`,
           background: 'rgba(28,28,30,0.62)',
           borderRadius: `${radius}px`,
           border: '1px solid rgba(255,255,255,0.1)',
@@ -144,11 +171,9 @@ function Dock({ apps, onAppClick, openIds = [] }) {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        <div style={{ position: 'relative', height: `${baseIconSize}px`, width: '100%' }}>
+        {/* height set by useLayoutEffect; icons are absolute children */}
+        <div ref={innerRef} style={{ position: 'relative', height: `${base}px` }}>
           {apps.map((app, i) => {
-            const scale = currentScales[i] || 1;
-            const pos   = currentPositions[i] || 0;
-            const size  = baseIconSize * scale;
             const isOpen    = openIds.includes(app.id);
             const isHovered = hovered === app.id;
 
@@ -157,26 +182,24 @@ function Dock({ apps, onAppClick, openIds = [] }) {
                 key={app.id}
                 ref={el => { iconRefs.current[i] = el; }}
                 style={{
+                  /* left / width / height intentionally OMITTED from JSX —
+                     the rAF loop owns them; React will never overwrite them. */
                   position: 'absolute',
-                  left: `${pos - size / 2}px`,
                   bottom: 0,
-                  width: `${size}px`,
-                  height: `${size}px`,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'flex-end',
                   justifyContent: 'center',
-                  zIndex: Math.round(scale * 10),
                 }}
                 onClick={() => handleClick(app, i)}
                 onMouseEnter={() => setHovered(app.id)}
                 onMouseLeave={() => setHovered(null)}
               >
-                {/* Tooltip */}
+                {/* Tooltip — 110% sits above the icon regardless of its magnified size */}
                 {isHovered && (
                   <div style={{
                     position: 'absolute',
-                    bottom: `${size + 10}px`,
+                    bottom: '110%',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     padding: '4px 10px',
@@ -190,36 +213,37 @@ function Dock({ apps, onAppClick, openIds = [] }) {
                     backdropFilter: 'blur(10px)',
                     pointerEvents: 'none',
                     zIndex: 100,
+                    marginBottom: 6,
                   }}>
                     {app.name}
                   </div>
                 )}
 
-                {/* Icon image */}
                 <img
                   src={app.icon}
                   alt={app.name}
+                  draggable="false"
                   style={{
-                    width: size,
-                    height: size,
+                    width: '100%',
+                    height: '100%',
                     objectFit: 'contain',
                     borderRadius: '22%',
                     display: 'block',
                     boxShadow: '0 4px 12px -2px rgba(0,0,0,0.45), 0 2px 4px rgba(0,0,0,0.3)',
+                    pointerEvents: 'none',
                   }}
                 />
 
-                {/* Open indicator dot */}
                 {isOpen && (
                   <div style={{
                     position: 'absolute',
                     bottom: -5,
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    width: 4,
-                    height: 4,
+                    width: 4, height: 4,
                     borderRadius: '50%',
                     background: 'rgba(255,255,255,0.7)',
+                    pointerEvents: 'none',
                   }} />
                 )}
               </div>
