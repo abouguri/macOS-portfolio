@@ -22,7 +22,8 @@ function GitHubGlyph() {
 
 function ProjectWindowContent({ project }) {
   const isAuthor = project.role === 'Author';
-  const showContribs = !isAuthor && project.contributions;
+  const hasContributionCopy = project.contributions && !project.contributions.startsWith('TODO');
+  const showContribs = !isAuthor && hasContributionCopy;
 
   return (
     <div className="pw-root">
@@ -95,7 +96,7 @@ function ProjectWindowContent({ project }) {
         {showContribs && (
           <div className="pw-section">
             <div className="pw-section-label">My contributions</div>
-            <p className={`pw-prose ${project.contributions && project.contributions.startsWith('TODO') ? 'todo' : ''}`}>
+            <p className="pw-prose">
               {project.contributions}
             </p>
           </div>

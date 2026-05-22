@@ -40,8 +40,14 @@ function Window({
 }) {
   const [pos, setPos] = React.useState(win.position || { x: 200, y: 90 });
   const [size] = React.useState(win.size || { w: 720, h: 480 });
+  const [maximized, setMaximized] = React.useState(false);
   const [opening, setOpening] = React.useState(true);
   const [closing, setClosing] = React.useState(false);
+  const posRef = React.useRef(pos);
+
+  React.useEffect(() => {
+    posRef.current = pos;
+  }, [pos]);
 
   React.useEffect(() => {
     const t = setTimeout(() => setOpening(false), 280);
@@ -53,10 +59,20 @@ function Window({
     setTimeout(() => onClose && onClose(win.id), 220);
   }
 
+  function toggleMaximize() {
+    onFocus && onFocus(win.id);
+    setMaximized((v) => !v);
+  }
+
   // drag
   const dragRef = React.useRef({ active: false, dx: 0, dy: 0 });
   function onTitlebarDown(e) {
     if (e.button !== 0) return;
+    if (e.detail === 2) {
+      toggleMaximize();
+      return;
+    }
+    if (maximized) return;
     onFocus && onFocus(win.id);
     dragRef.current = {
       active: true,
@@ -65,39 +81,57 @@ function Window({
     };
     function move(ev) {
       if (!dragRef.current.active) return;
-      const nx = ev.clientX - dragRef.current.dx;
-      const ny = Math.max(28, ev.clientY - dragRef.current.dy);
-      setPos({ x: nx, y: ny });
+      const margin = 16;
+      const nx = Math.min(
+        window.innerWidth - margin,
+        Math.max(-size.w + 96, ev.clientX - dragRef.current.dx)
+      );
+      const ny = Math.min(
+        window.innerHeight - 60,
+        Math.max(28, ev.clientY - dragRef.current.dy)
+      );
+      const next = { x: nx, y: ny };
+      posRef.current = next;
+      setPos(next);
     }
     function up() {
       dragRef.current.active = false;
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', up);
-      onPositionChange && onPositionChange(win.id, pos);
+      onPositionChange && onPositionChange(win.id, posRef.current);
     }
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', up);
   }
 
   const transformClass = opening ? 'win-opening' : closing ? 'win-closing' : '';
-
-  return (
-    <div
-      className={`win-root ${transformClass} ${focused ? 'win-focused' : 'win-unfocused'}`}
-      style={{
+  const frameStyle = maximized
+    ? {
+        left: 10,
+        top: 38,
+        width: 'calc(100vw - 20px)',
+        height: 'calc(100vh - 122px)',
+        zIndex,
+      }
+    : {
         left: pos.x,
         top: pos.y,
         width: size.w,
         height: size.h,
         zIndex,
-      }}
+      };
+
+  return (
+    <div
+      className={`win-root ${transformClass} ${focused ? 'win-focused' : 'win-unfocused'} ${maximized ? 'win-maximized' : ''}`}
+      style={frameStyle}
       onMouseDown={() => onFocus && onFocus(win.id)}
     >
       <div className="win-titlebar" onMouseDown={onTitlebarDown}>
         <TrafficLights
           onClose={handleClose}
           onMinimize={handleClose}
-          onMaximize={handleClose}
+          onMaximize={toggleMaximize}
         />
         <div className="win-title">{win.title}</div>
       </div>

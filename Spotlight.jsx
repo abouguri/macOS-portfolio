@@ -71,20 +71,11 @@ function Spotlight({ open, onClose, onPick, items, initialFilter }) {
     return flat;
   }, [filtered]);
 
-  // Only items are selectable
-  const itemIndexes = groups
-    .map((g, i) => (g.kind === 'item' ? i : -1))
-    .filter((i) => i >= 0);
-
-  function selByDelta(d) {
-    const current = itemIndexes.indexOf(itemIndexes[sel]);
-    const ni = Math.max(0, Math.min(itemIndexes.length - 1, sel + d));
-    setSel(ni);
-  }
+  const selectableCount = filtered.length;
 
   function onKey(e) {
     if (e.key === 'Escape') { onClose && onClose(); }
-    if (e.key === 'ArrowDown') { e.preventDefault(); setSel((s) => Math.min(s + 1, itemIndexes.length - 1)); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setSel((s) => Math.min(s + 1, Math.max(0, selectableCount - 1))); }
     if (e.key === 'ArrowUp')   { e.preventDefault(); setSel((s) => Math.max(s - 1, 0)); }
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -130,8 +121,9 @@ function Spotlight({ open, onClose, onPick, items, initialFilter }) {
                 return <div key={`grp-${g.name}`} className="spot-group-label">{g.name}</div>;
               }
               itemCounter += 1;
+              const selectableIndex = itemCounter;
               const it = g.it;
-              const isSel = sel === itemCounter;
+              const isSel = sel === selectableIndex;
               const r = it._ref || {};
               const sub = it.kind === 'project'
                 ? (r.role + ' · ' + r.year + ' · ' + r.type)
@@ -140,7 +132,7 @@ function Spotlight({ open, onClose, onPick, items, initialFilter }) {
                 <div
                   key={it.id + '-' + it.kind}
                   className={`spot-result ${isSel ? 'sel' : ''}`}
-                  onMouseEnter={() => setSel(itemCounter)}
+                  onMouseEnter={() => setSel(selectableIndex)}
                   onMouseDown={() => onPick && onPick(it)}
                 >
                   <SpotlightIcon src={it.icon} />

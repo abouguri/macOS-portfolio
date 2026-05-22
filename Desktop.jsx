@@ -12,11 +12,24 @@ function Desktop() {
   const [iconPositions, setIconPositions] = React.useState(() => {
     const map = {};
     (window.PROJECTS || []).forEach(p => { map[p.id] = p.position || { x: 0, y: 0 }; });
-    return map;
+    try {
+      const saved = JSON.parse(localStorage.getItem('desktopIconPositions') || '{}');
+      return { ...map, ...saved };
+    } catch {
+      return map;
+    }
   });
 
   function onIconPositionChange(id, pos) {
-    setIconPositions(prev => ({ ...prev, [id]: pos }));
+    setIconPositions(prev => {
+      const next = { ...prev, [id]: pos };
+      try {
+        localStorage.setItem('desktopIconPositions', JSON.stringify(next));
+      } catch {
+        // Non-critical: dragging should still work if storage is unavailable.
+      }
+      return next;
+    });
   }
   const [zCounter, setZCounter] = React.useState(10);
   const [spotOpen, setSpotOpen] = React.useState(false);
@@ -55,6 +68,10 @@ function Desktop() {
 
   function closeWindow(id) {
     setWindows((ws) => ws.filter((w) => w.id !== id));
+  }
+
+  function updateWindowPosition(id, position) {
+    setWindows((ws) => ws.map((w) => (w.id === id ? { ...w, position } : w)));
   }
 
   function focusWindow(id) {
@@ -259,6 +276,7 @@ function Desktop() {
             focused={topWindow && topWindow.id === w.id}
             onFocus={focusWindow}
             onClose={closeWindow}
+            onPositionChange={updateWindowPosition}
           />
         ))}
       </div>

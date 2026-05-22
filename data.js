@@ -98,10 +98,9 @@ window.PROJECTS = [
       { c: "linear-gradient(160deg,#102a1f 0%,#1f4533 100%)", label: "Briefing card" },
     ],
     what:
-      "TODO: paste the real summary from the README. Same shape as the others: what it does, why it's interesting, links.",
+      "A React and MapLibre interface for turning a selected place into a compact, structured brief. The project combines map interaction with LLM summarisation so a user can move from a geographic point of interest to a readable overview without leaving the map context.",
     why:
-      "TODO: fill in what makes this project interesting. Update once the README copy is ready.",
-    todo: true,
+      "The interesting part is the product shape: geospatial interfaces are great at showing where things are, but they often leave the interpretation to the user. GEObrief experiments with making location context immediately digestible while keeping the map as the primary surface.",
   },
 
   // ───────────── Contributor ─────────────
