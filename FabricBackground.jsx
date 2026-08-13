@@ -2,15 +2,18 @@
 // FabricBackground.jsx — dark silk background with cursor parallax
 // =========================================================================
 
-function FabricBackground({ children }) {
+function FabricBackground({ children, reducedMotion: reducedMotionPref }) {
   const [drift, setDrift] = React.useState({ x: 0, y: 0 });
-  const reducedMotion = React.useMemo(
+  const systemReduced = React.useMemo(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     []
   );
+  // The View menu can only ask for less motion, never more than the OS allows.
+  const reducedMotion = systemReduced || !!reducedMotionPref;
 
   React.useEffect(() => {
-    if (reducedMotion) return;
+    // Settle back to centre rather than freezing wherever the cursor left it.
+    if (reducedMotion) { setDrift({ x: 0, y: 0 }); return; }
     let raf = 0;
     let target = { x: 0, y: 0 };
     let current = { x: 0, y: 0 };

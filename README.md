@@ -118,7 +118,10 @@ The Projects tile in the dock opens the same panel pre-filtered to projects only
 Live clock and date, battery and Wi-Fi glyphs, a Spotlight button, and working
 dropdowns. The app-name slot tracks the focused window, exactly like the real
 thing. The Window menu lists open windows and focuses the one you pick; File has
-a "random project" roll for anyone who wants a tour.
+a "random project" roll for anyone who wants a tour. View carries two real
+preferences — dock magnification and reduced motion — which tick in place, keep
+their menu open while you set them, and persist to `localStorage`. Escape closes
+any open menu.
 
 **Other details worth a look:** a cursive `hi` intro that reveals left-to-right on
 first visit and then remembers it (`sessionStorage`), a silk-fabric background
@@ -312,9 +315,6 @@ Honest list, since this is a live project:
   Task Manager, TaskManager API, GEObrief, BigQuery ETL, IRC Server, NEO Risk
   Visualizer) still show gradient placeholders, because their repos have no
   captures to pull from.
-- Spotlight lists a **Resume** entry that has no window behind it yet.
-- The View menu's *Dock magnification* and *Reduce motion* toggles are declared
-  in `MENU_STRUCTURE` but not yet handled in `handleMenuAction`.
 - Windows drag but don't resize, and minimize behaves the same as close.
 - Layout targets desktop. It degrades on small screens (the dock adapts) but
   a phone will not enjoy dragging windows.

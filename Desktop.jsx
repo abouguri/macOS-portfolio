@@ -31,6 +31,35 @@ function Desktop() {
       return next;
     });
   }
+  // View-menu preferences. MENU_STRUCTURE items carry a `toggle` key naming
+  // the field they flip, so the menu stays declarative.
+  const [prefs, setPrefs] = React.useState(() => {
+    const defaults = { dockMag: true, reducedMotion: false };
+    try {
+      return { ...defaults, ...JSON.parse(localStorage.getItem('desktopPrefs') || '{}') };
+    } catch {
+      return defaults;
+    }
+  });
+
+  function togglePref(key) {
+    setPrefs(prev => {
+      const next = { ...prev, [key]: !prev[key] };
+      try {
+        localStorage.setItem('desktopPrefs', JSON.stringify(next));
+      } catch {
+        // Non-critical: the toggle should still work without storage.
+      }
+      return next;
+    });
+  }
+
+  // Reduced motion is document-wide: one class switches off every transition
+  // and animation at once, including the CSS-only ones no prop can reach.
+  React.useEffect(() => {
+    document.body.classList.toggle('reduced-motion', prefs.reducedMotion);
+  }, [prefs.reducedMotion]);
+
   const [zCounter, setZCounter] = React.useState(10);
   const [spotOpen, setSpotOpen] = React.useState(false);
   const [spotFilter, setSpotFilter] = React.useState(null);
@@ -169,7 +198,6 @@ function Desktop() {
     const pages = [
       { id: 'about',   name: 'About',   icon: 'assets/icons/dock/about.svg',    kind: 'page', _ref: { description: 'Background, school, contact' } },
       { id: 'contact', name: 'Contact', icon: 'assets/icons/dock/contact.svg',  kind: 'page', _ref: { description: 'Email and social links' } },
-      { id: 'resume',  name: 'Resume',  icon: 'assets/icons/dock/contact.svg',  kind: 'page', _ref: { description: 'Curriculum vitae · PDF' } },
     ];
     const ext = [
       { id: 'github',   name: 'GitHub',   icon: 'assets/icons/dock/github.svg',   kind: 'link', _ref: { href: 'https://github.com/abouguri' } },
@@ -215,6 +243,10 @@ function Desktop() {
         if (top) closeWindow(top.id);
         break;
       }
+      case 'toggle-mag':
+      case 'toggle-motion':
+        if (it.toggle) togglePref(it.toggle);
+        break;
       case 'focus-window':
         if (it.target) focusWindow(it.target);
         break;
@@ -239,13 +271,14 @@ function Desktop() {
   }
 
   return (
-    <FabricBackground>
+    <FabricBackground reducedMotion={prefs.reducedMotion}>
       {intro && <IntroAnimation onDone={markIntroDone} />}
 
       <MenuBar
         activeApp={activeAppName}
         openWindows={windows}
         onAction={handleMenuAction}
+        prefs={prefs}
         onSpotlight={() => { setSpotFilter(null); setSpotOpen(true); }}
       />
 
@@ -293,6 +326,7 @@ function Desktop() {
         apps={window.DOCK_APPS}
         onAppClick={openItem}
         openIds={windows.map((w) => w.id)}
+        magnify={prefs.dockMag}
       />
     </FabricBackground>
   );

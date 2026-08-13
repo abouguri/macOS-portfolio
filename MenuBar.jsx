@@ -2,7 +2,7 @@
 // MenuBar.jsx — wired dropdowns, click handlers, real menu actions
 // =========================================================================
 
-function MenuBar({ activeApp, openWindows, onAction, onSpotlight }) {
+function MenuBar({ activeApp, openWindows, onAction, onSpotlight, prefs = {} }) {
   const [now, setNow] = React.useState(new Date());
   const [openMenu, setOpenMenu] = React.useState(null);
 
@@ -16,8 +16,15 @@ function MenuBar({ activeApp, openWindows, onAction, onSpotlight }) {
       // close menus on outside click
       if (!e.target.closest('.mb-menu')) setOpenMenu(null);
     }
+    function onKey(e) {
+      if (e.key === 'Escape') setOpenMenu(null);
+    }
     document.addEventListener('mousedown', onDocDown);
-    return () => document.removeEventListener('mousedown', onDocDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocDown);
+      document.removeEventListener('keydown', onKey);
+    };
   }, []);
 
   const timeStr = now.toLocaleTimeString(undefined, {
@@ -42,17 +49,22 @@ function MenuBar({ activeApp, openWindows, onAction, onSpotlight }) {
       <div className="mb-dropdown" onMouseDown={(e) => e.stopPropagation()}>
         {items.map((it, i) => {
           if (it === '—') return <div key={i} className="mb-divider"/>;
+          const checked = it.toggle ? !!prefs[it.toggle] : false;
           return (
             <div
               key={i}
-              className={`mb-item ${it.disabled ? 'disabled' : ''}`}
+              className={`mb-item ${it.disabled ? 'disabled' : ''} ${it.toggle ? 'checkable' : ''}`}
               onMouseDown={() => {
                 if (it.disabled) return;
-                setOpenMenu(null);
+                // A toggle keeps its menu open so the tick is visible.
+                if (!it.toggle) setOpenMenu(null);
                 if (it.action) onAction && onAction(it);
               }}
             >
-              <span>{it.label}</span>
+              <span className="mb-item-main">
+                {it.toggle && <span className="mb-check">{checked ? '✓' : ''}</span>}
+                <span>{it.label}</span>
+              </span>
               {it.shortcut && <span className="mb-item-shortcut">{it.shortcut}</span>}
             </div>
           );

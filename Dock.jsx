@@ -6,8 +6,12 @@
 // useLayoutEffect sets initial geometry before first paint (no flash).
 // =========================================================================
 
-function Dock({ apps, onAppClick, openIds = [] }) {
+function Dock({ apps, onAppClick, openIds = [], magnify = true }) {
   const [hovered, setHovered] = React.useState(null);
+
+  // Read inside the rAF loop without re-subscribing it on every toggle.
+  const magnifyRef = React.useRef(magnify);
+  React.useEffect(() => { magnifyRef.current = magnify; }, [magnify]);
 
   const wrapRef     = React.useRef(null);   // the glass pill
   const innerRef    = React.useRef(null);   // relative icon container
@@ -69,7 +73,8 @@ function Dock({ apps, onAppClick, openIds = [] }) {
       const { base, maxScale, fx } = configRef.current || computeConfig();
       const spacing = sp(base);
       const padding = pad(base);
-      const mX  = mouseXRef.current;
+      // Magnification off: every icon eases back to rest and stays there.
+      const mX  = magnifyRef.current ? mouseXRef.current : null;
       const lerp = mX !== null ? 0.20 : 0.10;
 
       let x = 0;
