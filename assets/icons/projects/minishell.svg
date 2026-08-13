@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="msb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b2b24"></stop>
+      <stop offset="1" stop-color="#070c0a"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#msb)"></rect>
+
+  <!-- terminal frame -->
+  <rect x="140" y="196" width="744" height="632" rx="40" fill="#0c1512" stroke="#5de3a6" stroke-opacity="0.22" stroke-width="6"></rect>
+  <path d="M 140 300 H 884" stroke="#5de3a6" stroke-opacity="0.16" stroke-width="6"></path>
+  <g fill="#5de3a6" opacity="0.35">
+    <circle cx="208" cy="248" r="17"></circle>
+    <circle cx="268" cy="248" r="17"></circle>
+    <circle cx="328" cy="248" r="17"></circle>
+  </g>
+
+  <!-- prompt + cursor -->
+  <path d="M 232 400 L 310 452 L 232 504" fill="none" stroke="#5de3a6" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <rect x="356" y="404" width="128" height="96" rx="8" fill="#5de3a6" opacity="0.9"></rect>
+
+  <!-- a pipeline: two stages joined by a pipe -->
+  <g>
+    <rect x="232" y="606" width="184" height="34" rx="17" fill="#bff5dc" opacity="0.6"></rect>
+    <rect x="452" y="596" width="10" height="54" rx="5" fill="#5de3a6" opacity="0.95"></rect>
+    <rect x="498" y="606" width="150" height="34" rx="17" fill="#bff5dc" opacity="0.42"></rect>
+  </g>
+  <g>
+    <rect x="232" y="700" width="120" height="34" rx="17" fill="#bff5dc" opacity="0.3"></rect>
+    <path d="M 392 717 H 470" stroke="#5de3a6" stroke-width="18" stroke-linecap="round" opacity="0.8"></path>
+    <path d="M 448 693 L 476 717 L 448 741" fill="none" stroke="#5de3a6" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"></path>
+    <rect x="512" y="700" width="136" height="34" rx="17" fill="#bff5dc" opacity="0.22"></rect>
+  </g>
+</svg>

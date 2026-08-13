@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="nb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#161d3d"></stop>
+      <stop offset="1" stop-color="#05070f"></stop>
+    </linearGradient>
+    <linearGradient id="ne" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3f7fd0"></stop>
+      <stop offset="1" stop-color="#123055"></stop>
+    </linearGradient>
+    <linearGradient id="nt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd07a" stop-opacity="0"></stop>
+      <stop offset="1" stop-color="#ff8a4b" stop-opacity="0.95"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#nb)"></rect>
+
+  <!-- stars -->
+  <g fill="#dce6ff">
+    <circle cx="182" cy="188" r="5" opacity="0.75"></circle>
+    <circle cx="342" cy="122" r="3.5" opacity="0.5"></circle>
+    <circle cx="820" cy="212" r="4.5" opacity="0.6"></circle>
+    <circle cx="700" cy="118" r="3" opacity="0.45"></circle>
+    <circle cx="906" cy="392" r="3.5" opacity="0.5"></circle>
+    <circle cx="122" cy="404" r="4" opacity="0.55"></circle>
+  </g>
+
+  <!-- earth limb -->
+  <circle cx="512" cy="1004" r="452" fill="url(#ne)"></circle>
+  <circle cx="512" cy="1004" r="452" fill="none" stroke="#8fc3ff" stroke-width="8" opacity="0.5"></circle>
+
+  <!-- impact rings on the surface -->
+  <g fill="none" stroke="#ffb066" stroke-linecap="round">
+    <ellipse cx="512" cy="566" rx="70" ry="24" stroke-width="14" opacity="0.95"></ellipse>
+    <ellipse cx="512" cy="566" rx="140" ry="48" stroke-width="11" opacity="0.6"></ellipse>
+    <ellipse cx="512" cy="566" rx="216" ry="76" stroke-width="9" opacity="0.32"></ellipse>
+  </g>
+
+  <!-- incoming trajectory -->
+  <path d="M 852 168 Q 700 320 566 520" fill="none" stroke="url(#nt)" stroke-width="18" stroke-linecap="round"></path>
+  <circle cx="854" cy="166" r="42" fill="#c9713c"></circle>
+  <circle cx="840" cy="152" r="13" fill="#8c4520" opacity="0.85"></circle>
+  <circle cx="872" cy="182" r="9" fill="#8c4520" opacity="0.7"></circle>
+</svg>

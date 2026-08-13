@@ -95,7 +95,9 @@ function DesktopIcon({ project, position, selected, onSelect, onOpen, onPosition
           </div>
         )}
       </div>
-      <div className="d-icon-label">{project.name}</div>
+      {/* shortName keeps long names legible under the icon without shortening
+          the window title, which has room for the full thing. */}
+      <div className="d-icon-label">{project.shortName || project.name}</div>
     </div>
   );
 }

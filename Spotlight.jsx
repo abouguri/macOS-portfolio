@@ -4,6 +4,8 @@
 // Transcendence via "RabbitMQ").
 // =========================================================================
 
+const MAX_RESULTS = 24;
+
 function SpotlightIcon({ src }) {
   return <img src={src} alt="" />;
 }
@@ -43,14 +45,16 @@ function Spotlight({ open, onClose, onPick, items, initialFilter }) {
     if (initialFilter === 'project') {
       pool = pool.filter((it) => it.kind === 'project');
     }
-    if (!q) return pool.slice(0, 10);
+    // Cap generously — .spot-results scrolls, and a low cap silently hides
+    // projects from the browse view as the list grows.
+    if (!q) return pool.slice(0, MAX_RESULTS);
     const needle = q.toLowerCase();
     return pool
       .filter((it) =>
         it._haystack.includes(needle) ||
         it.name.toLowerCase().includes(needle)
       )
-      .slice(0, 10);
+      .slice(0, MAX_RESULTS);
   }, [q, indexed, initialFilter]);
 
   // Group results
