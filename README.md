@@ -315,6 +315,5 @@ node docs/capture-screenshots.js
 
 <div align="center">
 
-Built by [**abouguri**](https://github.com/abouguri) · [abdelaadim2000@gmail.com](mailto:abdelaadim2000@gmail.com) · [LinkedIn](https://www.linkedin.com/in/abdelaadim-bougurine)
-
+Built by [**abouguri**](https://github.com/abouguri)
 </div>
