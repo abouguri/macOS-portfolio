@@ -31,8 +31,8 @@ window.PROJECTS = [
     icon: "assets/icons/projects/quanta.svg",
     position: { x: -560, y: -215 },
     images: [
-      { c: "linear-gradient(135deg,#0d1f2d 0%,#1b3a52 100%)", label: "Landing screen" },
-      { c: "linear-gradient(150deg,#13283a 0%,#264f73 100%)", label: "Analysis result · 78 / 100" },
+      { src: "assets/screenshots/quanta/landing.webp", pos: "top", c: "linear-gradient(135deg,#0d1f2d 0%,#1b3a52 100%)", label: "Landing screen" },
+      { src: "assets/screenshots/quanta/report.webp", pos: "top", c: "linear-gradient(150deg,#13283a 0%,#264f73 100%)", label: "Article analysis · 91 / 100" },
     ],
     what:
       "You paste a URL or some article text and it runs four separate LLM checks: fact risk, bias and framing, sensationalism, and red flags. Each check is independent and you get a 0 to 100 score with a written breakdown. History is saved locally, you can copy the output as markdown, and it works in both English and Arabic.",
@@ -53,8 +53,8 @@ window.PROJECTS = [
     icon: "assets/icons/projects/taskflow.svg",
     position: { x: -560, y: -45 },
     images: [
-      { c: "linear-gradient(150deg,#123a4d 0%,#1d6a63 100%)", label: "Today · what's due" },
-      { c: "linear-gradient(160deg,#0f2f3e 0%,#22b3a0 100%)", label: "Task open in place" },
+      { src: "assets/screenshots/taskflow/today.webp", pos: "top", c: "linear-gradient(150deg,#123a4d 0%,#1d6a63 100%)", label: "Today · what's due" },
+      { src: "assets/screenshots/taskflow/task-open.webp", pos: "top", c: "linear-gradient(160deg,#0f2f3e 0%,#22b3a0 100%)", label: "Task open in place" },
     ],
     what:
       "Six lists that each mean something: Inbox, Today, Upcoming grouped by day, Anytime, Someday, and a Logbook. Areas hold projects, projects divide into headings you name, and you can drag a to-do between sections. Quick capture opens over whatever you were doing, and typing \"call the dentist tomorrow\" or \"water the plants every friday\" gets the date and the repeat out of the sentence. Notes, checklists, tags, a scheduled date and a separate deadline. One Flutter codebase for Android, iOS and web.",
@@ -119,8 +119,8 @@ window.PROJECTS = [
     icon: "assets/icons/projects/inception.svg",
     position: { x: 410, y: 125 },
     images: [
-      { c: "linear-gradient(140deg,#16202a 0%,#283744 100%)", label: "Service topology" },
-      { c: "linear-gradient(150deg,#1c2731 0%,#34495f 100%)", label: "Portfolio sub-site · dark" },
+      { src: "assets/screenshots/inception/wordpress.webp", c: "linear-gradient(140deg,#16202a 0%,#283744 100%)", label: "WordPress · behind NGINX" },
+      { src: "assets/screenshots/inception/portfolio-dark.webp", pos: "top", c: "linear-gradient(150deg,#1c2731 0%,#34495f 100%)", label: "Portfolio sub-site · dark" },
     ],
     what:
       "Five Docker containers: NGINX (TLS + reverse proxy), WordPress + PHP-FPM, MariaDB, Adminer, and a static portfolio site. All on a custom bridge network with persistent volumes, all built from debian:bullseye. No pre-built images, no latest tags.",
@@ -140,8 +140,8 @@ window.PROJECTS = [
     icon: "assets/icons/projects/cub3d.svg",
     position: { x: 410, y: -215 },
     images: [
-      { c: "linear-gradient(180deg,#3a1a0e 0%,#0e0806 70%)", label: "Textured walls · 60fps" },
-      { c: "linear-gradient(180deg,#241208 0%,#0e0806 60%)", label: "Minimap + health HUD" },
+      { src: "assets/screenshots/cub3d/corridor.webp", c: "linear-gradient(180deg,#3a1a0e 0%,#0e0806 70%)", label: "Textured walls · 60fps" },
+      { src: "assets/screenshots/cub3d/enemies.webp", c: "linear-gradient(180deg,#241208 0%,#0e0806 60%)", label: "Enemies · minimap + health" },
     ],
     what:
       "Wolfenstein 3D-style first-person engine in C, rendering with raycasting (DDA) onto MinilibX. WASD + mouse-look, textured walls per cardinal direction, animated sprites, configurable floor and ceiling colors via .cub map files.",
@@ -212,8 +212,8 @@ window.PROJECTS = [
     icon: "assets/icons/projects/transcendence.svg",
     position: { x: 560, y: -45 },
     images: [
-      { c: "linear-gradient(150deg,#1a1130 0%,#3a2566 100%)", label: "Architecture · 5 services" },
-      { c: "linear-gradient(180deg,#0e0820 0%,#231447 100%)", label: "Match lobby" },
+      { src: "assets/screenshots/transcendence/architecture.webp", fit: "contain", c: "linear-gradient(150deg,#e8ecf2 0%,#c8d2e0 100%)", label: "Architecture · 5 services" },
+      { src: "assets/screenshots/transcendence/services.webp", fit: "contain", c: "linear-gradient(160deg,#eef1f5 0%,#ccd6e2 100%)", label: "Service implementation" },
     ],
     what:
       "Real-time multiplayer Pong as event-driven microservices. An API Gateway fans out to four services (user, game, chat, tournament), all communicating asynchronously over RabbitMQ. Secrets in HashiCorp Vault, ModSecurity WAF at the edge, 2FA + JWT auth, SQLite per service, Redis for sessions. Goal: under 30 seconds from page load to a fair online match.",
@@ -259,8 +259,7 @@ window.PROJECTS = [
     icon: "assets/icons/projects/minishell.svg",
     position: { x: 560, y: -215 },
     images: [
-      { c: "linear-gradient(160deg,#1b2b24 0%,#2f6b4d 100%)", label: "Interactive prompt" },
-      { c: "linear-gradient(150deg,#0d1712 0%,#255f42 100%)", label: "Pipeline · ls | grep | wc" },
+      { src: "assets/screenshots/minishell/prompt.webp", pos: "top", c: "linear-gradient(160deg,#1b2b24 0%,#2f6b4d 100%)", label: "Prompt · echo | cat, pwd" },
     ],
     contributions:
       "TODO: one paragraph in your own words. Did you own the lexer and tree construction, the executor and process handling, or the built-ins and environment? Say which side of the parser/executor split was yours, and be specific.",

@@ -161,6 +161,9 @@
   gap: 12px;
   margin-bottom: 28px;
 }
+/* One screenshot spans the row rather than leaving a hole beside it. */
+.pw-grid.single { grid-template-columns: 1fr; }
+.pw-grid.single .pw-img-block { height: 260px; }
 .pw-img-block {
   border-radius: 8px;
   height: 200px;

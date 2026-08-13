@@ -84,10 +84,16 @@ Every project window is generated from one data object:
 
 ![A project window](docs/screenshots/project-window.png)
 
-Role pill (Author / Contributor), year, type, stack chip row, two hero panels,
-a *What it does* / *Why it's interesting* writeup, and CTAs to the repo and the
-live demo. Contributor projects get an extra *My contributions* section — but
-only once you've actually written it (see [Making it yours](#making-it-yours)).
+Role pill (Author / Contributor), year, type, stack chip row, screenshots of the
+project itself, a *What it does* / *Why it's interesting* writeup, and CTAs to
+the repo and the live demo. Contributor projects get an extra *My contributions*
+section — but only once you've actually written it (see
+[Making it yours](#making-it-yours)).
+
+Screenshots are pulled from each project's own repo, downscaled and served as
+WebP from `assets/screenshots/`. A project with no captures yet falls back to its
+gradient panel rather than breaking the layout, and one with a single capture
+spans the full row instead of leaving a hole.
 
 ### Spotlight — ⌘K
 
@@ -200,9 +206,13 @@ Push an object onto `window.PROJECTS`:
   live: "https://…",            // optional — adds a "Live demo" CTA
   icon: "assets/icons/projects/myproject.svg",
   position: { x: -200, y: 100 },     // offset from the centre of the desktop
-  images: [                          // two gradient panels above the writeup
-    { c: "linear-gradient(135deg,#123 0%,#456 100%)", label: "Landing screen" },
-    { c: "linear-gradient(150deg,#234 0%,#567 100%)", label: "Detail view" },
+  images: [                          // one or two panels above the writeup
+    { src: "assets/screenshots/myproject/landing.webp",
+      c: "linear-gradient(135deg,#123 0%,#456 100%)",   // shown while loading
+      pos: "top",                                        // default "center"
+      label: "Landing screen" },
+    { c: "linear-gradient(150deg,#234 0%,#567 100%)",    // no src = placeholder
+      label: "Detail view" },
   ],
   what: "What it does, plainly.",
   why:  "Why it's technically interesting.",
@@ -220,6 +230,13 @@ one to stay in the set.
 
 The desktop label is capped at 112px, so anything much past ~15 characters wants
 a `shortName`. The window title always uses the full `name`.
+
+For screenshots, drop WebP files in `assets/screenshots/<project>/`. Panels are
+about 370×200, so downscale to ~900px wide — anything larger is wasted bytes.
+`fit: "contain"` suits a wide diagram that shouldn't be cropped; `pos: "top"`
+suits a portrait phone capture, where the top of the screen is the interesting
+part. Give a contained image a light `c` if the image itself has a light
+background, so the letterboxing doesn't fight it.
 </details>
 
 <details>
@@ -291,6 +308,10 @@ Honest list, since this is a live project:
   Visualizer) still have `TODO` placeholders in their `contributions` field. The
   UI hides the section until they're written, so nothing looks broken — but
   they're empty.
+- Six of the twelve projects have real screenshots; the other six (Enterprise
+  Task Manager, TaskManager API, GEObrief, BigQuery ETL, IRC Server, NEO Risk
+  Visualizer) still show gradient placeholders, because their repos have no
+  captures to pull from.
 - Spotlight lists a **Resume** entry that has no window behind it yet.
 - The View menu's *Dock magnification* and *Reduce motion* toggles are declared
   in `MENU_STRUCTURE` but not yet handled in `handleMenuAction`.

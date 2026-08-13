@@ -73,13 +73,26 @@ function ProjectWindowContent({ project }) {
           ))}
         </div>
 
-        {/* Hero grid */}
-        <div className="pw-grid">
+        {/* Hero grid. An entry with a src paints the real screenshot; one with
+            only a gradient stays a placeholder, so projects without shots yet
+            still render. fit/pos let a portrait phone capture or a wide diagram
+            sit properly in a landscape panel. */}
+        <div className={`pw-grid ${project.images.length === 1 ? 'single' : ''}`}>
           {project.images.slice(0, 2).map((img, i) => (
             <div
               key={i}
               className="pw-img-block"
-              style={{ background: img.c }}
+              style={
+                img.src
+                  ? {
+                      background: img.c,
+                      backgroundImage: `url("${img.src}")`,
+                      backgroundSize: img.fit || 'cover',
+                      backgroundPosition: img.pos || 'center',
+                      backgroundRepeat: 'no-repeat',
+                    }
+                  : { background: img.c }
+              }
             >
               <div className="pw-img-label">{img.label}</div>
             </div>
