@@ -1,13 +1,17 @@
+
 // =========================================================================
 // Desktop.jsx — main composer. Owns windows, selection, spotlight, menubar
 // actions. Dock / desktop / spotlight all open through openItem().
 // =========================================================================
 
-function Desktop() {
-  const [intro, setIntro] = React.useState(() => {
-    return sessionStorage.getItem('introSeen') !== '1';
-  });
-  const [selected, setSelected] = React.useState(null);
+function Desktop(props) {
+  // boot → login → desktop. Plays every visit; boot is click-skippable.
+  const bootMode = (props && props.bootMode) || 'full';
+  const [phase, setPhase] = React.useState(
+    bootMode === 'skip' ? 'desktop' : bootMode === 'login-only' ? 'login' : 'boot'
+  );
+  const [selectedIds, setSelectedIds] = React.useState(() => new Set());
+  const [selRect, setSelRect] = React.useState(null);
   const [windows, setWindows] = React.useState([]);
   const [iconPositions, setIconPositions] = React.useState(() => {
     const map = {};
@@ -64,10 +68,12 @@ function Desktop() {
   const [spotOpen, setSpotOpen] = React.useState(false);
   const [spotFilter, setSpotFilter] = React.useState(null);
 
-  function markIntroDone() {
-    sessionStorage.setItem('introSeen', '1');
-    setIntro(false);
-  }
+  const iconPositionsRef = React.useRef(iconPositions);
+  React.useEffect(() => { iconPositionsRef.current = iconPositions; }, [iconPositions]);
+
+  // Long-lived window content (the terminal) calls back through this ref so
+  // it always reaches the latest openItem/handleMenuAction closures.
+  const actionsRef = React.useRef({});
 
   // Look up a project by id
   function findProject(id) {
@@ -76,10 +82,10 @@ function Desktop() {
 
   // ── Window management ────────────────────────────────────────────────
   function openWindow(spec) {
-    // If already open: focus
+    // If already open: focus (and un-minimize)
     const existing = windows.find((w) => w.id === spec.id);
     if (existing) {
-      focusWindow(spec.id);
+      restoreWindow(spec.id);
       return;
     }
     const offset = (windows.length % 6) * 30;
@@ -111,6 +117,22 @@ function Desktop() {
     });
   }
 
+  function minimizeWindow(id) {
+    setWindows((ws) => ws.map((w) => (w.id === id ? { ...w, minimized: true } : w)));
+  }
+
+  function restoreWindow(id) {
+    setWindows((ws) => {
+      const next = zCounter + 1;
+      setZCounter(next);
+      return ws.map((w) => (w.id === id ? { ...w, minimized: false, z: next } : w));
+    });
+  }
+
+  function retitleWindow(id, title) {
+    setWindows((ws) => ws.map((w) => (w.id === id ? { ...w, title } : w)));
+  }
+
   // ── Single open-anything dispatcher (dock, desktop, spotlight all use it) ──
   function openItem(item) {
     // External link
@@ -133,20 +155,36 @@ function Desktop() {
       openWindow({
         id: proj.id,
         title: proj.name,
-        kind: 'project',
-        size: { w: 820, h: 600 },
-        content: <ProjectWindowContent project={proj} />,
+        kind: 'finder',
+        icon: proj.icon,
+        size: { w: 940, h: 620 },
+        content: <FinderProjectContent initialId={proj.id} onRetitle={(t) => retitleWindow(proj.id, t)} />,
       });
       return;
     }
 
-    // Static windows (About, Contact)
+    // Static windows (About, Contact, Terminal)
     const target = item.target || item.id;
+    if (target === 'terminal') {
+      openWindow({
+        id: 'terminal',
+        title: `${(window.ABOUT && window.ABOUT.handle) || 'guest'} — zsh — 80×24`,
+        kind: 'terminal',
+        icon: 'assets/icons/dock/terminal.svg',
+        size: { w: 700, h: 470 },
+        content: <TerminalContent
+          onOpenProject={(p) => actionsRef.current.openItem && actionsRef.current.openItem({ kind: 'project', _ref: p })}
+          onWallpaper={(v) => actionsRef.current.menuAction && actionsRef.current.menuAction({ action: 'set-wallpaper', value: v })}
+        />,
+      });
+      return;
+    }
     if (target === 'about') {
       openWindow({
         id: 'about',
         title: 'About',
         kind: 'about',
+        icon: 'assets/icons/dock/about.svg',
         size: { w: 520, h: 380 },
         content: <AboutWindowContent />,
       });
@@ -157,6 +195,7 @@ function Desktop() {
         id: 'contact',
         title: 'Contact',
         kind: 'contact',
+        icon: 'assets/icons/dock/contact.svg',
         size: { w: 480, h: 420 },
         content: <ContactWindowContent />,
       });
@@ -174,7 +213,7 @@ function Desktop() {
       }
       if (e.key === 'Escape') {
         if (spotOpen) setSpotOpen(false);
-        else setSelected(null);
+        else setSelectedIds(new Set());
       }
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'w') {
         e.preventDefault();
@@ -247,8 +286,19 @@ function Desktop() {
       case 'toggle-motion':
         if (it.toggle) togglePref(it.toggle);
         break;
+      case 'set-wallpaper':
+        setPrefs((prev) => {
+          const next = { ...prev, wallpaper: it.value };
+          try {
+            localStorage.setItem('desktopPrefs', JSON.stringify(next));
+          } catch {
+            // Non-critical
+          }
+          return next;
+        });
+        break;
       case 'focus-window':
-        if (it.target) focusWindow(it.target);
+        if (it.target) restoreWindow(it.target);
         break;
       case 'link':
         if (it.href) window.open(it.href, '_blank', 'noopener');
@@ -261,73 +311,126 @@ function Desktop() {
     }
   }
 
-  const topWindow = windows.length
-    ? windows.reduce((a, b) => (b.z > a.z ? b : a))
+  const visibleWindows = windows.filter((w) => !w.minimized);
+  const topWindow = visibleWindows.length
+    ? visibleWindows.reduce((a, b) => (b.z > a.z ? b : a))
     : null;
   const activeAppName = topWindow ? topWindow.title : 'abouguri';
 
-  function onDesktopMouseDown() {
-    setSelected(null);
+  // Rubber-band selection on empty desktop space
+  const deskRef = React.useRef(null);
+  function onDesktopMouseDown(e) {
+    if (e.button !== 0) return;
+    if (e.target.closest('.d-icon') || e.target.closest('.win-root') || e.target.closest('.sel-rect')) return;
+    const rect = deskRef.current.getBoundingClientRect();
+    const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+    setSelectedIds(new Set());
+    let started = false;
+    function mv(ev) {
+      const cx = ev.clientX - rect.left, cy = ev.clientY - rect.top;
+      if (!started && Math.hypot(cx - sx, cy - sy) < 4) return;
+      started = true;
+      const r = { x: Math.min(sx, cx), y: Math.min(sy, cy), w: Math.abs(cx - sx), h: Math.abs(cy - sy) };
+      setSelRect(r);
+      // icon boxes: 84w × ~104h, anchored at calc(50% + pos - offset)
+      const cw = rect.width / 2, ch = rect.height / 2;
+      const hits = new Set();
+      (window.PROJECTS || []).forEach((p) => {
+        const ip = iconPositionsRef.current[p.id] || { x: 0, y: 0 };
+        const ix = cw + ip.x - 42, iy = ch + ip.y - 50;
+        if (ix < r.x + r.w && ix + 84 > r.x && iy < r.y + r.h && iy + 104 > r.y) hits.add(p.id);
+      });
+      setSelectedIds(hits);
+    }
+    function up() {
+      window.removeEventListener('mousemove', mv);
+      window.removeEventListener('mouseup', up);
+      setSelRect(null);
+    }
+    window.addEventListener('mousemove', mv);
+    window.addEventListener('mouseup', up);
+  }
+
+  const wallpaper = prefs.wallpaper || (props && props.wallpaper) || 'graphite';
+
+  actionsRef.current.openItem = openItem;
+  actionsRef.current.menuAction = handleMenuAction;
+
+  if (phase === 'boot') {
+    return <BootSequence onDone={() => setPhase('login')} />;
   }
 
   return (
-    <FabricBackground reducedMotion={prefs.reducedMotion}>
-      {intro && <IntroAnimation onDone={markIntroDone} />}
+    <FabricBackground reducedMotion={prefs.reducedMotion} wallpaper={wallpaper}>
+      {phase === 'login' && <LoginScreen onDone={() => setPhase('desktop')} />}
 
-      <MenuBar
-        activeApp={activeAppName}
-        openWindows={windows}
-        onAction={handleMenuAction}
-        prefs={prefs}
-        onSpotlight={() => { setSpotFilter(null); setSpotOpen(true); }}
-      />
-
-      <div className="desktop" onMouseDown={onDesktopMouseDown}>
-        {/* center monogram */}
-        <img className="desktop-monogram" src="assets/monogram.svg" alt="" />
-
-        <div className="desktop-icons-layer">
-          {(window.PROJECTS || []).map((p) => (
-            <DesktopIcon
-              key={p.id}
-              project={p}
-              position={iconPositions[p.id]}
-              selected={selected === p.id}
-              onSelect={setSelected}
-              onOpen={(proj) => openItem({ kind: 'project', _ref: proj })}
-              onPositionChange={onIconPositionChange}
-            />
-          ))}
-        </div>
-
-        {/* windows */}
-        {windows.map((w) => (
-          <Window
-            key={w.id}
-            win={w}
-            zIndex={w.z}
-            focused={topWindow && topWindow.id === w.id}
-            onFocus={focusWindow}
-            onClose={closeWindow}
-            onPositionChange={updateWindowPosition}
+      {phase === 'desktop' && (
+        <div className="desktop-enter">
+          <MenuBar
+            activeApp={activeAppName}
+            openWindows={windows}
+            onAction={handleMenuAction}
+            prefs={{ ...prefs, wallpaper }}
+            onSpotlight={() => { setSpotFilter(null); setSpotOpen(true); }}
           />
-        ))}
-      </div>
 
-      <Spotlight
-        open={spotOpen}
-        onClose={() => setSpotOpen(false)}
-        onPick={onSpotPick}
-        items={spotItems}
-        initialFilter={spotFilter}
-      />
+          <div className="desktop" ref={deskRef} onMouseDown={onDesktopMouseDown}>
+            {/* center monogram */}
+            {(props && (props.showMonogram === false || props.showMonogram === 'false')) ? null : (
+              <img className="desktop-monogram" src="assets/monogram.svg" alt="" />
+            )}
 
-      <Dock
-        apps={window.DOCK_APPS}
-        onAppClick={openItem}
-        openIds={windows.map((w) => w.id)}
-        magnify={prefs.dockMag}
-      />
+            {selRect && (
+              <div className="sel-rect" style={{ left: selRect.x, top: selRect.y, width: selRect.w, height: selRect.h }}></div>
+            )}
+
+            <div className="desktop-icons-layer">
+              {(window.PROJECTS || []).map((p) => (
+                <DesktopIcon
+                  key={p.id}
+                  project={p}
+                  position={iconPositions[p.id]}
+                  selected={selectedIds.has(p.id)}
+                  onSelect={(id) => setSelectedIds(new Set([id]))}
+                  onOpen={(proj) => openItem({ kind: 'project', _ref: proj })}
+                  onPositionChange={onIconPositionChange}
+                />
+              ))}
+            </div>
+
+            {/* windows */}
+            {visibleWindows.map((w) => (
+              <Window
+                key={w.id}
+                win={w}
+                zIndex={w.z}
+                focused={topWindow && topWindow.id === w.id}
+                onFocus={focusWindow}
+                onClose={closeWindow}
+                onMinimize={minimizeWindow}
+                onPositionChange={updateWindowPosition}
+              />
+            ))}
+          </div>
+
+          <Spotlight
+            open={spotOpen}
+            onClose={() => setSpotOpen(false)}
+            onPick={onSpotPick}
+            items={spotItems}
+            initialFilter={spotFilter}
+          />
+
+          <Dock
+            apps={window.DOCK_APPS}
+            onAppClick={openItem}
+            openIds={windows.map((w) => w.id)}
+            magnify={prefs.dockMag}
+            minimized={windows.filter((w) => w.minimized).map((w) => ({ id: w.id, title: w.title, icon: w.icon, kind: w.kind }))}
+            onRestore={restoreWindow}
+          />
+        </div>
+      )}
     </FabricBackground>
   );
 }

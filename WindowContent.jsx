@@ -85,13 +85,16 @@ function ProjectWindowContent({ project }) {
               style={
                 img.src
                   ? {
-                      background: img.c,
-                      backgroundImage: `url("${img.src}")`,
-                      backgroundSize: img.fit || 'cover',
-                      backgroundPosition: img.pos || 'center',
-                      backgroundRepeat: 'no-repeat',
+                      // Two layers, no `background` shorthand: mixing shorthand
+                      // and longhand makes React warn on every rerender. The
+                      // gradient sits under the shot, so it shows through while
+                      // the image loads and behind a `contain` letterbox.
+                      backgroundImage: `url("${img.src}"), ${img.c}`,
+                      backgroundSize: `${img.fit || 'cover'}, cover`,
+                      backgroundPosition: `${img.pos || 'center'}, center`,
+                      backgroundRepeat: 'no-repeat, no-repeat',
                     }
-                  : { background: img.c }
+                  : { backgroundImage: img.c }
               }
             >
               <div className="pw-img-label">{img.label}</div>

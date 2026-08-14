@@ -4,9 +4,11 @@
 
 **A personal portfolio that behaves like a desktop.**
 
-Draggable icons, a real cosine-magnification dock, stacking windows with focus
-states, and ⌘K search that indexes your tech stack. No build step, no framework
-CLI, no `node_modules` — just open `index.html`.
+It boots. It asks you to log in. Then you get draggable icons, a real
+cosine-magnification dock, resizable windows that minimise into the dock, a
+Finder that browses the projects, a working Terminal, and ⌘K search over the
+tech stack. No build step, no framework CLI, no `node_modules` — just open
+`index.html`.
 
 </div>
 
@@ -18,10 +20,13 @@ CLI, no `node_modules` — just open `index.html`.
 
 - [What it is](#what-it-is)
 - [The pieces](#the-pieces)
+  - [Boot and login](#boot-and-login)
   - [Dock](#dock--cosine-magnification)
-  - [Windows](#windows--stacking-focus-and-drag)
+  - [Windows](#windows--stacking-focus-resize-minimise)
+  - [Finder](#finder--browsing-the-projects)
+  - [Terminal](#terminal)
   - [Spotlight](#spotlight--k)
-  - [Menu bar](#menu-bar)
+  - [Menu bar and Control Center](#menu-bar-and-control-center)
 - [Running it](#running-it)
 - [Project structure](#project-structure)
 - [Making it yours](#making-it-yours)
@@ -38,20 +43,42 @@ links to the repo and live demo. The layout you arrange persists across reloads.
 
 It runs entirely in the browser with **zero build tooling**. React and Babel come
 from a CDN, JSX is transpiled in the page, and every component registers itself on
-`window`. That is a deliberate constraint: the whole thing is six CSS/JS files you
-can read top to bottom, and deploying is copying a folder.
+`window`. That is a deliberate constraint: the whole thing is a handful of CSS and
+JS files you can read top to bottom, and deploying is copying a folder.
 
 | | |
 |---|---|
 | **Stack** | React 18 (UMD) · Babel Standalone · vanilla CSS |
 | **Build step** | None |
 | **Dependencies** | None installed — 3 CDN `<script>` tags |
-| **Total size** | ~107 KB of source, 88 KB of SVG assets |
+| **Total size** | ~163 KB of source, 460 KB of assets |
 | **Projects** | 12, each one object in `data.js` |
 
 ---
 
 ## The pieces
+
+### Boot and login
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/boot.png" alt="Boot screen"></td>
+<td width="50%"><img src="docs/screenshots/login.png" alt="Login screen"></td>
+</tr>
+</table>
+
+A cold load starts on black, fades in an Apple logo, and fills a progress bar
+over about four and a half seconds — with a deliberate stall around 55%, because
+real firmware never fills linearly. A soft major chord plays through WebAudio if
+the browser allows it. Click anywhere to skip.
+
+Then a login screen over the blurred wallpaper. The avatar is a monkey covering
+his eyes; hover him and he peeks out, waves, and dances. Any password works, or
+click the avatar. Once you unlock, the menu bar drops in from the top and the
+dock rises from the bottom.
+
+If you would rather not sit through it, `Desktop` takes a `bootMode` prop:
+`full` (default), `login-only`, or `skip`.
 
 ### Dock — cosine magnification
 
@@ -70,30 +97,56 @@ dock scales sensibly from phone to ultrawide.
 
 Open windows get a dot under their tile. Clicking bounces the icon.
 
-### Windows — stacking, focus, and drag
+### Windows — stacking, focus, resize, minimise
 
-![Multiple windows open](docs/screenshots/windows.png)
+![Several windows open](docs/screenshots/windows.png)
 
 Windows cascade as they open, drag by the title bar, and raise on click via a
 monotonic z-counter. The focused window gets full-strength chrome; the ones
-behind it fade back. Traffic lights work — red and yellow both close, green
-toggles maximize (double-clicking the title bar does too). Opening a project
-that is already open focuses the existing window instead of duplicating it.
+behind it fade back. All three traffic lights do their own job now: red closes,
+green toggles maximize (double-clicking the title bar does too), and yellow
+scales the window down toward the dock, where it parks in a tray beside it until
+you click it back. Eight handles resize from any edge or corner, with a
+380×260 floor. Opening a project that is already open focuses the existing
+window instead of duplicating it.
 
-Every project window is generated from one data object:
+Windows also come in three flavours: the Finder browser, a dark Terminal, and
+plain panels for About and Contact.
 
-![A project window](docs/screenshots/project-window.png)
+### Finder — browsing the projects
 
-Role pill (Author / Contributor), year, type, stack chip row, screenshots of the
-project itself, a *What it does* / *Why it's interesting* writeup, and CTAs to
-the repo and the live demo. Contributor projects get an extra *My contributions*
-section — but only once you've actually written it (see
-[Making it yours](#making-it-yours)).
+![The Finder project browser](docs/screenshots/finder.png)
+
+Opening a project no longer opens a bare page — it opens a Finder window with a
+sidebar listing every project plus About and Contact. Clicking a row swaps the
+content pane in place and retitles the window, so you can walk the whole
+portfolio without opening twelve windows. The sidebar runs up under the title
+bar the way real Finder does.
+
+Each project pane is generated from one data object: role pill (Author /
+Contributor), year, type, stack chip row, screenshots of the project itself, a
+*What it does* / *Why it's interesting* writeup, and CTAs to the repo and the
+live demo. Contributor projects get an extra *My contributions* section — but
+only once you've actually written it (see [Making it yours](#making-it-yours)).
 
 Screenshots are pulled from each project's own repo, downscaled and served as
 WebP from `assets/screenshots/`. A project with no captures yet falls back to its
 gradient panel rather than breaking the layout, and one with a single capture
 spans the full row instead of leaving a hole.
+
+### Terminal
+
+![The terminal](docs/screenshots/terminal.png)
+
+A real micro-shell, not a prop. It auto-types `help` on open, then hands you a
+prompt with command history on the arrow keys. `ls` lists the twelve projects by
+id, `open quanta` actually opens that project's Finder window, `stack` prints the
+tech table, `wallpaper sunset` redecorates the desktop, and `clear`, `pwd`,
+`echo`, `whoami` and `date` behave. `sudo` tells you the incident will be
+reported.
+
+The commands that change the desktop reach back through a ref, so the terminal
+always calls the current handlers rather than the ones captured when it mounted.
 
 ### Spotlight — ⌘K
 
@@ -111,22 +164,29 @@ recruiter who is scanning for a technology rather than a project name.
 
 The Projects tile in the dock opens the same panel pre-filtered to projects only.
 
-### Menu bar
+### Menu bar and Control Center
 
-![Menu bar dropdown](docs/screenshots/menubar.png)
+![The View menu](docs/screenshots/menubar.png)
 
-Live clock and date, battery and Wi-Fi glyphs, a Spotlight button, and working
-dropdowns. The app-name slot tracks the focused window, exactly like the real
-thing. The Window menu lists open windows and focuses the one you pick; File has
-a "random project" roll for anyone who wants a tour. View carries two real
-preferences — dock magnification and reduced motion — which tick in place, keep
-their menu open while you set them, and persist to `localStorage`. Escape closes
-any open menu.
+Live clock and date, and dropdowns that work. The app-name slot tracks the
+focused window, exactly like the real thing. The Window menu lists open windows
+and focuses the one you pick; File has a "random project" roll for anyone who
+wants a tour. View carries real preferences — dock magnification, reduced
+motion, and four wallpapers — which tick in place, keep their menu open while
+you set them, and persist to `localStorage`. Escape closes any open menu.
 
-**Other details worth a look:** a cursive `hi` intro that reveals left-to-right on
-first visit and then remembers it (`sessionStorage`), a silk-fabric background
-that parallaxes against the cursor and respects `prefers-reduced-motion`, and a
-contributor badge on icons for projects you didn't author.
+![Control Center](docs/screenshots/control-center.png)
+
+The right side is clickable too. Battery, Wi-Fi and Control Center each open a
+frosted popover: the Wi-Fi one lists networks and switches off, and Control
+Center has Wi-Fi, Bluetooth and Focus tiles plus display and sound sliders. The
+brightness slider genuinely dims the whole page through a fixed veil.
+
+**Other details worth a look:** four wallpapers (graphite, Sequoia blue, sunset,
+forest) built entirely from layered CSS gradients — no image files — which
+parallax against the cursor and respect `prefers-reduced-motion`; rubber-band
+selection across the desktop; and a contributor badge on icons for projects you
+didn't author.
 
 ---
 
@@ -162,23 +222,27 @@ data.js                 ← everything you edit lives here
 ├── ABOUT               Name, role, bio, links
 ├── PROJECTS[]          One object per project (icon, stack, writeup, position)
 ├── DOCK_APPS[]         Dock tiles: window / spotlight / external link
-└── MENU_STRUCTURE[]    Menu bar dropdowns and their actions
+└── MENU_STRUCTURE[]    Menu bar dropdowns, toggles, wallpaper radios
 
-Desktop.jsx             Composer. Owns windows, z-order, selection, shortcuts.
-                        Everything opens through one openItem() dispatcher.
-├── FabricBackground    Silk background + cursor parallax
-├── IntroAnimation      First-visit "hi" reveal
-├── MenuBar             Clock, glyphs, wired dropdowns
+Desktop.jsx             Composer. Owns the boot→login→desktop phase, windows,
+                        z-order, selection, prefs, shortcuts. Everything opens
+                        through one openItem() dispatcher.
+├── FabricBackground    Gradient wallpaper + cursor parallax
+├── BootLogin           Boot sequence, chime, login screen
+├── MenuBar             Clock, dropdowns, Wi-Fi / battery / Control Center
 ├── DesktopIcon         Drag, select, open; positions persisted
-├── Window              Chrome, drag, focus, maximize, open/close animation
-│   └── WindowContent   Project / About / Contact window bodies
+├── Window              Chrome, drag, focus, maximize, resize, minimise
+│   ├── WindowContent   Project / About / Contact bodies
+│   └── FinderTerminal  Finder sidebar browser + the Terminal shell
 ├── Spotlight           ⌘K search, grouped + keyboard-driven
-└── Dock                Cosine magnification via rAF
+└── Dock                Cosine magnification via rAF, minimised-window tray
 
 colors_and_type.css     Design tokens — colors, type scale, spacing, easing
 portfolio.css           Layout: desktop, windows, dock, menu bar
-portfolio-extras.css    Window content, spotlight, intro, icon states
-assets/                 SVG monogram, dock icons, project icons
+portfolio-extras.css    Window content, spotlight, icon states
+realism.css             Boot, login, wallpapers, Finder, Terminal, Control
+                        Center, resize handles, minimise tray
+assets/                 SVG monogram, dock icons, project icons, screenshots
 ```
 
 Adding a component means writing the file, assigning `window.Foo = Foo` at the
@@ -297,9 +361,29 @@ unselected icon selects it; a second click on an already-selected icon opens it;
 double-click always opens. Positions are written to `localStorage` on mouse-up
 inside a `try/catch`, so dragging still works when storage is unavailable.
 
-**One dispatcher for everything.** The dock, desktop icons, Spotlight, and menu
-bar all route through `openItem()` in `Desktop.jsx`. Adding a new way to launch
-something means constructing a descriptor, not writing new window logic.
+**One dispatcher for everything.** The dock, desktop icons, Spotlight, the menu
+bar and the Terminal all route through `openItem()` in `Desktop.jsx`. Adding a
+new way to launch something means constructing a descriptor, not writing new
+window logic.
+
+**Resize handles have to live inside the frame.** `.win-root` sets
+`overflow: hidden` to clip content to its rounded corners. Hanging the eight
+handles outside the window on negative offsets — the obvious way to get a grab
+band on the edge — puts them in the clipped region, where they render nothing
+*and* receive no pointer events, so dragging an edge silently does nothing. They
+sit just inside instead, and the top-left one starts past the traffic lights so
+it can't swallow a close click.
+
+**The Terminal calls forward, not backward.** It mounts once and lives as long
+as its window, so the `openItem` closure it captured at mount would go stale.
+Commands like `open quanta` and `wallpaper forest` go through a ref that
+`Desktop` rewrites on every render, so the terminal always reaches the current
+handlers.
+
+**Wallpapers are gradients, not images.** Each theme is five stacked radial and
+linear gradients plus a blurred "ridge" highlight and a vignette, so switching
+theme is a class swap with nothing to download, and the whole set costs zero
+bytes of assets.
 
 ---
 
@@ -315,7 +399,12 @@ Honest list, since this is a live project:
   Task Manager, TaskManager API, GEObrief, BigQuery ETL, IRC Server, NEO Risk
   Visualizer) still show gradient placeholders, because their repos have no
   captures to pull from.
-- Windows drag but don't resize, and minimize behaves the same as close.
+- The boot sequence plays on every visit rather than once per session. It is
+  skippable with a click, but it is still four and a half seconds in front of
+  anyone who reloads.
+- Wi-Fi networks, the battery percentage and the Focus toggle in Control Center
+  are set dressing. The brightness and sound sliders move, but only brightness
+  does anything.
 - Layout targets desktop. It degrades on small screens (the dock adapts) but
   a phone will not enjoy dragging windows.
 

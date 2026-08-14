@@ -2,7 +2,7 @@
 // FabricBackground.jsx — dark silk background with cursor parallax
 // =========================================================================
 
-function FabricBackground({ children, reducedMotion: reducedMotionPref }) {
+function FabricBackground({ children, reducedMotion: reducedMotionPref, wallpaper = 'graphite' }) {
   const [drift, setDrift] = React.useState({ x: 0, y: 0 });
   const systemReduced = React.useMemo(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -41,19 +41,19 @@ function FabricBackground({ children, reducedMotion: reducedMotionPref }) {
   }, [reducedMotion]);
 
   return (
-    <div className="fabric-root">
+    <div className={`wallpaper-root wp-theme-${wallpaper}`}>
       <div
-        className="fabric-layer"
+        className="wallpaper-layer"
         style={{
-          transform: `translate3d(${drift.x}px, ${drift.y}px, 0) scale(1.04)`,
+          transform: `translate3d(${drift.x}px, ${drift.y}px, 0) scale(1.06)`,
         }}
       >
-        <div className="fabric-conic"></div>
-        <div className="fabric-sheen-1"></div>
-        <div className="fabric-sheen-2"></div>
-        <div className="fabric-sheen-3"></div>
+        <div className="wp-base"></div>
+        <div className="wp-wave wp-wave-1"></div>
+        <div className="wp-wave wp-wave-2"></div>
+        <div className="wp-ridge"></div>
+        <div className="wp-glow"></div>
       </div>
-      <div className="fabric-vignette"></div>
       {children}
     </div>
   );

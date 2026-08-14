@@ -36,14 +36,18 @@ function Window({
   focused,
   onFocus,
   onClose,
+  onMinimize,
   onPositionChange,
 }) {
   const [pos, setPos] = React.useState(win.position || { x: 200, y: 90 });
-  const [size] = React.useState(win.size || { w: 720, h: 480 });
+  const [size, setSize] = React.useState(win.size || { w: 720, h: 480 });
   const [maximized, setMaximized] = React.useState(false);
   const [opening, setOpening] = React.useState(true);
   const [closing, setClosing] = React.useState(false);
+  const [resizing, setResizing] = React.useState(false);
+  const [minStyle, setMinStyle] = React.useState(null);
   const posRef = React.useRef(pos);
+  const rootRef = React.useRef(null);
 
   React.useEffect(() => {
     posRef.current = pos;
@@ -57,6 +61,50 @@ function Window({
   function handleClose() {
     setClosing(true);
     setTimeout(() => onClose && onClose(win.id), 220);
+  }
+
+  // Minimize: scale + fall toward the dock, then hand off to the tray.
+  function handleMinimize() {
+    const el = rootRef.current;
+    if (!el || !onMinimize) { onMinimize && onMinimize(win.id); return; }
+    const r = el.getBoundingClientRect();
+    const dx = window.innerWidth / 2 - (r.left + r.width / 2);
+    const dy = (window.innerHeight - 48) - (r.top + r.height / 2);
+    setMinStyle({ transform: `translate(${dx}px, ${dy}px) scale(0.05)` });
+    setTimeout(() => onMinimize(win.id), 420);
+  }
+
+  // Edge / corner resize
+  function onResizeDown(e, dir) {
+    if (maximized) return;
+    if (e.button !== 0) return;
+    e.stopPropagation();
+    e.preventDefault();
+    onFocus && onFocus(win.id);
+    setResizing(true);
+    const sx = e.clientX, sy = e.clientY;
+    const sw = size.w, sh = size.h, spx = pos.x, spy = pos.y;
+    const MINW = 380, MINH = 260;
+    function mv(ev) {
+      const dx = ev.clientX - sx, dy = ev.clientY - sy;
+      let w = sw, h = sh, x = spx, y = spy;
+      if (dir.includes('e')) w = Math.max(MINW, sw + dx);
+      if (dir.includes('s')) h = Math.max(MINH, sh + dy);
+      if (dir.includes('w')) { w = Math.max(MINW, sw - dx); x = spx + (sw - w); }
+      if (dir.includes('n')) { h = Math.max(MINH, sh - dy); y = Math.max(28, spy + (sh - h)); }
+      setSize({ w, h });
+      const np = { x, y };
+      posRef.current = np;
+      setPos(np);
+    }
+    function up() {
+      setResizing(false);
+      window.removeEventListener('mousemove', mv);
+      window.removeEventListener('mouseup', up);
+      onPositionChange && onPositionChange(win.id, posRef.current);
+    }
+    window.addEventListener('mousemove', mv);
+    window.addEventListener('mouseup', up);
   }
 
   function toggleMaximize() {
@@ -123,19 +171,23 @@ function Window({
 
   return (
     <div
-      className={`win-root ${transformClass} ${focused ? 'win-focused' : 'win-unfocused'} ${maximized ? 'win-maximized' : ''}`}
-      style={frameStyle}
+      ref={rootRef}
+      className={`win-root win-${win.kind || 'app'} ${transformClass} ${focused ? 'win-focused' : 'win-unfocused'} ${maximized ? 'win-maximized' : ''} ${minStyle ? 'win-minimizing' : ''} ${resizing ? 'win-resizing' : ''}`}
+      style={{ ...frameStyle, ...(minStyle || {}) }}
       onMouseDown={() => onFocus && onFocus(win.id)}
     >
       <div className="win-titlebar" onMouseDown={onTitlebarDown}>
         <TrafficLights
           onClose={handleClose}
-          onMinimize={handleClose}
+          onMinimize={handleMinimize}
           onMaximize={toggleMaximize}
         />
         <div className="win-title">{win.title}</div>
       </div>
       <div className="win-body">{win.content}</div>
+      {['n','s','e','w','ne','nw','se','sw'].map((d) => (
+        <div key={d} className={`rz rz-${d}`} onMouseDown={(e) => onResizeDown(e, d)}></div>
+      ))}
     </div>
   );
 }

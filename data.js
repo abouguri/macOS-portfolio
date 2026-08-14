@@ -12,7 +12,7 @@ window.ABOUT = {
   github: "https://github.com/abouguri",
   linkedin: "https://www.linkedin.com/in/abdelaadim-bougurine",
   bio:
-    "I build things at most levels of the stack, from C++ servers and raycasters to Next.js apps with LLMs. I like projects that get close to the hardware but still ship something clean.",
+    "I write C++ servers and raycasters when I want pain, and Next.js apps with LLMs when I want to ship by Friday. Most of the stack, no drama. Close to the hardware, allergic to messy code.",
 };
 
 window.PROJECTS = [
@@ -294,12 +294,13 @@ window.PROJECTS = [
   },
 ];
 
-// Dock holds navigation, not projects. Five tiles max so magnification feels good.
+// Dock holds navigation, not projects. Six tiles max so magnification feels good.
 window.DOCK_APPS = [
   { id: "about",    name: "About",    icon: "assets/icons/dock/about.svg",    kind: "window", target: "about" },
   { id: "projects", name: "Projects", icon: "assets/icons/dock/projects.svg", kind: "spotlight", filter: "project" },
   { id: "github",   name: "GitHub",   icon: "assets/icons/dock/github.svg",   kind: "link", href: "https://github.com/abouguri" },
   { id: "linkedin", name: "LinkedIn", icon: "assets/icons/dock/linkedin.svg", kind: "link", href: "https://www.linkedin.com/in/abdelaadim-bougurine" },
+  { id: "terminal", name: "Terminal", icon: "assets/icons/dock/terminal.svg", kind: "window", target: "terminal" },
   { id: "contact",  name: "Contact",  icon: "assets/icons/dock/contact.svg",  kind: "window", target: "contact" },
 ];
 
@@ -329,6 +330,11 @@ window.MENU_STRUCTURE = [
     items: [
       { label: "Dock magnification", action: "toggle-mag", toggle: "dockMag" },
       { label: "Reduce motion", action: "toggle-motion", toggle: "reducedMotion" },
+      "—",
+      { label: "Graphite", action: "set-wallpaper", value: "graphite", radio: "wallpaper" },
+      { label: "Sequoia Blue", action: "set-wallpaper", value: "sequoia", radio: "wallpaper" },
+      { label: "Sunset", action: "set-wallpaper", value: "sunset", radio: "wallpaper" },
+      { label: "Forest", action: "set-wallpaper", value: "forest", radio: "wallpaper" },
     ],
   },
   {

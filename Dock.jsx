@@ -6,7 +6,7 @@
 // useLayoutEffect sets initial geometry before first paint (no flash).
 // =========================================================================
 
-function Dock({ apps, onAppClick, openIds = [], magnify = true }) {
+function Dock({ apps, onAppClick, openIds = [], magnify = true, minimized = [], onRestore }) {
   const [hovered, setHovered] = React.useState(null);
 
   // Read inside the rAF loop without re-subscribing it on every toggle.
@@ -155,11 +155,7 @@ function Dock({ apps, onAppClick, openIds = [], magnify = true }) {
   const initW   = apps.length * (base + sp(base)) - sp(base);
 
   return (
-    <div style={{
-      position: 'fixed', bottom: 24, left: 0, right: 0,
-      display: 'flex', justifyContent: 'center',
-      zIndex: 50, pointerEvents: 'none',
-    }}>
+    <div className="dock-fixed-wrap">
       <div
         ref={wrapRef}
         style={{
@@ -256,6 +252,22 @@ function Dock({ apps, onAppClick, openIds = [], magnify = true }) {
           })}
         </div>
       </div>
+      {minimized.length > 0 && (
+        <div className="dock-min-tray">
+          {minimized.map((m) => (
+            <div
+              key={m.id}
+              className={`dock-min-item ${m.kind === 'terminal' ? 'dark' : ''}`}
+              title={m.title}
+              onClick={() => onRestore && onRestore(m.id)}
+            >
+              {m.icon
+                ? <img src={m.icon} alt="" draggable="false"/>
+                : <span className="dock-min-fallback">{(m.title || '?').slice(0, 1)}</span>}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
