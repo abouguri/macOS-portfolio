@@ -1,29 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <defs>
-    <linearGradient id="apb" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#0e3a63"></stop>
-      <stop offset="1" stop-color="#061726"></stop>
-    </linearGradient>
-    <linearGradient id="apa" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7cc9ff"></stop>
-      <stop offset="1" stop-color="#2f7fd6"></stop>
-    </linearGradient>
-  </defs>
-  <rect width="1024" height="1024" fill="url(#apb)"></rect>
-
-  <!-- braces -->
-  <g fill="none" stroke="url(#apa)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 372 300 Q 296 300 296 380 L 296 462 Q 296 512 244 512 Q 296 512 296 562 L 296 644 Q 296 724 372 724"></path>
-    <path d="M 652 300 Q 728 300 728 380 L 728 462 Q 728 512 780 512 Q 728 512 728 562 L 728 644 Q 728 724 652 724"></path>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <rect width="128" height="128" fill="#103B63"/>
+  <g stroke="#99D7FF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M43 33H37Q31 33 31 41V52Q31 64 22 64Q31 64 31 76V87Q31 95 37 95H43M85 33H91Q97 33 97 41V52Q97 64 106 64Q97 64 97 76V87Q97 95 91 95H85"/>
+    <path d="M52 47H76M52 64H70M52 81H76" stroke="#F0F8FF"/>
   </g>
-
-  <!-- three endpoint rows -->
-  <g>
-    <rect x="396" y="392" width="232" height="30" rx="15" fill="#cfe8ff" opacity="0.85"></rect>
-    <rect x="396" y="497" width="180" height="30" rx="15" fill="#cfe8ff" opacity="0.55"></rect>
-    <rect x="396" y="602" width="212" height="30" rx="15" fill="#cfe8ff" opacity="0.7"></rect>
-  </g>
-
-  <!-- 409: the conflict the server enforces -->
-  <text x="512" y="856" text-anchor="middle" font-family="-apple-system, SF Pro Display, Inter, sans-serif" font-size="88" font-weight="700" fill="#7cc9ff" letter-spacing="-2" opacity="0.9">409</text>
 </svg>

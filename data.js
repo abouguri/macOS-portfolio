@@ -27,6 +27,7 @@ window.PROJECTS = [
     type: "Film · Web App",
     stack: ["Next.js 15", "React 19", "TypeScript", "Tailwind CSS v4", "Supabase", "PostgreSQL · RLS", "TanStack Query", "TanStack Virtual", "Framer Motion", "TMDB", "Vercel cron"],
     repo: "https://github.com/abouguri/seen",
+    live: "https://seen-gold.vercel.app/",
     icon: "assets/icons/projects/seen.svg",
     position: { x: -260, y: 125 },
     images: [

@@ -1,0 +1,160 @@
+{
+  "date": "2026-09-05",
+  "checks": [
+    {
+      "name": "Desktop icon assets",
+      "value": [
+        {
+          "src": "assets/icons/projects/seen.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/mori.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/quanta.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/taskflow.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/etm-android.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/taskmanager-api.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/inception.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/cub3d.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/geobrief.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/bigquery-etl.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/transcendence.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/ircserver.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/minishell.svg",
+          "loaded": true
+        },
+        {
+          "src": "assets/icons/projects/neo.svg",
+          "loaded": true
+        }
+      ]
+    },
+    {
+      "name": "Keyboard targets",
+      "value": {
+        ".d-icon": 0,
+        ".finder-item": 0,
+        ".dock-fixed-wrap [style]": 0,
+        ".mb-menu": 0
+      }
+    },
+    {
+      "name": "Spotlight selection visibility",
+      "value": {
+        "selected": "LinkedIn\nwww.linkedin.com/in/abdelaadim-bougurine",
+        "selectedTop": 1023.47998046875,
+        "viewportBottom": 505.0799865722656,
+        "scrollTop": 0,
+        "visible": false
+      }
+    },
+    {
+      "name": "Finder after minimize restore",
+      "value": {
+        "title": "Mori",
+        "content": "Quanta",
+        "scrollTop": 0
+      }
+    },
+    {
+      "name": "Finder switch scroll",
+      "value": 500
+    },
+    {
+      "name": "Idle 3 seconds",
+      "value": {
+        "scriptSeconds": 0.064234,
+        "layouts": 0,
+        "styleRecalculations": 360
+      }
+    },
+    {
+      "name": "Icon overflow 1024px",
+      "value": [
+        "Quanta",
+        "TaskFlow",
+        "Enterprise TM",
+        "BigQuery ETL",
+        "Transcendence",
+        "minishell"
+      ]
+    },
+    {
+      "name": "Icon overflow 800px",
+      "value": [
+        "Quanta",
+        "TaskFlow",
+        "Enterprise TM",
+        "TaskMgr API",
+        "Inception",
+        "cub3D",
+        "GEObrief",
+        "BigQuery ETL",
+        "Transcendence",
+        "IRC Server",
+        "minishell",
+        "NEO Risk"
+      ]
+    },
+    {
+      "name": "Mobile first tap opens",
+      "value": 0
+    },
+    {
+      "name": "Mobile second tap opens",
+      "value": 1
+    },
+    {
+      "name": "Mobile project dimensions",
+      "value": {
+        "viewport": 390,
+        "sidebar": 190,
+        "main": 198,
+        "mainScrollWidth": 198,
+        "headerHeight": 366.5,
+        "windowHeight": 814
+      }
+    },
+    {
+      "name": "OS reduced-motion dock hover",
+      "value": {
+        "before": 56,
+        "after": 89.203125
+      }
+    }
+  ],
+  "errors": []
+}

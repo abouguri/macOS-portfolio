@@ -32,6 +32,7 @@ tech stack. No build step, no framework CLI, no `node_modules` — just open
 - [Making it yours](#making-it-yours)
 - [How the tricky parts work](#how-the-tricky-parts-work)
 - [Known gaps](#known-gaps)
+- [Product audit and icon review](#product-audit-and-icon-review)
 
 ---
 
@@ -293,9 +294,11 @@ contributions** section — which stays hidden until you fill in a `contribution
 field that doesn't start with `TODO`. That's intentional: an unwritten
 contribution note never ships.
 
-Icons are 1024×1024 SVGs in `assets/icons/projects/` — a full-bleed gradient
-`<rect>` and a bold mark, with the corner radius applied in CSS. Copy an existing
-one to stay in the set.
+Project icons use a 128×128 SVG viewBox in `assets/icons/projects/`, with a
+full-bleed background and the corner radius applied in CSS. Use the project's
+existing mark when available, with enough padding to avoid clipping. See the
+[icon sources](docs/icon-sources.md) and [size preview](docs/icon-preview.html)
+before creating a new illustration.
 
 The desktop label is capped at 112px, so anything much past ~15 characters wants
 a `shortName`. The window title always uses the full `name`.
@@ -388,6 +391,19 @@ theme is a class swap with nothing to download, and the whole set costs zero
 bytes of assets.
 
 ---
+
+## Product audit and icon review
+
+The [5 September 2026 product audit](docs/portfolio-audit.md) documents 25
+prioritized findings, reproduction steps, browser evidence, and completion
+criteria. It covers mobile layout, keyboard access, window state, content,
+delivery, and performance. Findings remain open unless explicitly marked as
+completed in the report.
+
+All 14 project icons were reviewed against available source logos. The
+[icon preview](docs/icon-preview.html) shows desktop, search and Finder sizes;
+[source notes](docs/icon-sources.md) distinguish original marks from portfolio
+illustrations.
 
 ## Known gaps
 

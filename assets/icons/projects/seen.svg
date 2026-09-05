@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-  <!--
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <rect width="128" height="128" fill="#F0EBFA"/>
+  <svg x="14" y="14" width="100" height="100" viewBox="0 0 100 100"><!--
     The SEEN mark: three cards fanned into a stack, the front one wearing
     the app's one dot. Geometry is derived directly from the percentages
     in components/shell/SeenMark.tsx. CSS rotate() turns about an
@@ -23,5 +24,5 @@
   <g transform="rotate(5, 64, 49)">
     <rect x="34" y="10" width="60" height="78" rx="14.4" fill="#5436ce"/>
     <ellipse cx="76.6" cy="27.55" rx="6.6" ry="6.63" fill="#ffffff"/>
-  </g>
+  </g></svg>
 </svg>

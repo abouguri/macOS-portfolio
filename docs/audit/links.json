@@ -1,0 +1,24 @@
+[
+  {
+    "url": "https://factnews-six.vercel.app",
+    "status": 200,
+    "finalUrl": "https://factnews-six.vercel.app",
+    "type": "text/html; charset=utf-8"
+  },
+  {
+    "url": "https://task-flow-ai-blush.vercel.app",
+    "status": 200,
+    "finalUrl": "https://task-flow-ai-blush.vercel.app",
+    "type": "text/html; charset=utf-8"
+  },
+  {
+    "url": "https://taskmanager-api.azurewebsites.net/health",
+    "error": "HTTP Error 403: Site Disabled"
+  },
+  {
+    "url": "https://mori-web-eight.vercel.app",
+    "status": 200,
+    "finalUrl": "https://mori-web-eight.vercel.app",
+    "type": "text/html; charset=utf-8"
+  }
+]
