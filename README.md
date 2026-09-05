@@ -52,7 +52,7 @@ JS files you can read top to bottom, and deploying is copying a folder.
 | **Build step** | None |
 | **Dependencies** | None installed — 3 CDN `<script>` tags |
 | **Total size** | ~163 KB of source, 460 KB of assets |
-| **Projects** | 12, each one object in `data.js` |
+| **Projects** | 14, each one object in `data.js` |
 
 ---
 
@@ -120,7 +120,7 @@ plain panels for About and Contact.
 Opening a project no longer opens a bare page — it opens a Finder window with a
 sidebar listing every project plus About and Contact. Clicking a row swaps the
 content pane in place and retitles the window, so you can walk the whole
-portfolio without opening twelve windows. The sidebar runs up under the title
+portfolio without opening every project window. The sidebar runs up under the title
 bar the way real Finder does.
 
 Each project pane is generated from one data object: role pill (Author /
@@ -139,7 +139,7 @@ spans the full row instead of leaving a hole.
 ![The terminal](docs/screenshots/terminal.png)
 
 A real micro-shell, not a prop. It auto-types `help` on open, then hands you a
-prompt with command history on the arrow keys. `ls` lists the twelve projects by
+prompt with command history on the arrow keys. `ls` lists all projects by
 id, `open quanta` actually opens that project's Finder window, `stack` prints the
 tech table, `wallpaper sunset` redecorates the desktop, and `clear`, `pwd`,
 `echo`, `whoami` and `date` behave. `sudo` tells you the incident will be
@@ -282,6 +282,8 @@ Push an object onto `window.PROJECTS`:
       label: "Detail view" },
   ],
   what: "What it does, plainly.",
+  architecture: "How the app is structured.", // optional section
+  designSystem: "Tokens, themes and UI conventions.", // optional section
   why:  "Why it's technically interesting.",
 }
 ```
@@ -395,7 +397,7 @@ Honest list, since this is a live project:
   Visualizer) still have `TODO` placeholders in their `contributions` field. The
   UI hides the section until they're written, so nothing looks broken — but
   they're empty.
-- Six of the twelve projects have real screenshots; the other six (Enterprise
+- Eight of the fourteen projects have real screenshots; the other six (Enterprise
   Task Manager, TaskManager API, GEObrief, BigQuery ETL, IRC Server, NEO Risk
   Visualizer) still show gradient placeholders, because their repos have no
   captures to pull from.

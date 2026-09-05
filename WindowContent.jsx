@@ -108,6 +108,19 @@ function ProjectWindowContent({ project }) {
           <p className={`pw-prose ${project.todo ? 'todo' : ''}`}>{project.what}</p>
         </div>
 
+        {project.architecture && (
+          <div className="pw-section">
+            <div className="pw-section-label">Architecture</div>
+            <p className="pw-prose">{project.architecture}</p>
+          </div>
+        )}
+        {project.designSystem && (
+          <div className="pw-section">
+            <div className="pw-section-label">Design system</div>
+            <p className="pw-prose">{project.designSystem}</p>
+          </div>
+        )}
+
         {/* My contributions (contributor projects only) */}
         {showContribs && (
           <div className="pw-section">

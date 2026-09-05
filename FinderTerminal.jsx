@@ -50,16 +50,16 @@ function FinderProjectContent({ initialId, onRetitle }) {
 
 const TERM_STACK = [
   ['Languages', 'C , C++ , Kotlin , Dart , TypeScript , Python , C#'],
-  ['Frontend',  'React , Next.js 14 , Flutter , Tailwind , MapLibre'],
+  ['Frontend',  'React 19 , Next.js 14 / 15 , Flutter , Tailwind CSS v4 , TanStack Query / Virtual , Framer Motion , MapLibre'],
   ['Backend',   'Node.js , Fastify , ASP.NET Core , FastAPI'],
-  ['Data',      'PostgreSQL , MySQL , BigQuery , SQLite , Redis'],
-  ['DevOps',    'Docker , NGINX , Cloud Build , Azure , Vercel'],
+  ['Data',      'PostgreSQL , Supabase , SQLAlchemy , Alembic , MySQL , BigQuery , SQLite , Redis , IndexedDB / Dexie'],
+  ['DevOps',    'Docker Compose , ARQ , MinIO , NGINX , Cloud Build , Azure , Vercel cron'],
   ['Systems',   'epoll , raycasting (DDA) , readline , fork / execve'],
 ];
 
 const TERM_COMMANDS = [
   ['help',             "you're looking at it"],
-  ['ls',               'the 12 projects. yes, twelve.'],
+  ['ls',               `list all ${(window.PROJECTS || []).length} projects`],
   ['open <project>',   'opens one. try: open quanta'],
   ['stack',            'the arsenal'],
   ['about',            'the lore'],
