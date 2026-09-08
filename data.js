@@ -1,12 +1,12 @@
 // =========================================================================
-// data.js — abouguri portfolio data
+// data.js - abouguri portfolio data
 // =========================================================================
 
 window.ABOUT = {
   name: "abouguri",
   handle: "abouguri",
   role: "Software Engineer",
-  school: "1337 Coding School (42 Network — Morocco)",
+  school: "1337 Coding School (42 Network - Morocco)",
   location: "Morocco",
   email: "abdelaadim2000@gmail.com",
   github: "https://github.com/abouguri",
@@ -354,9 +354,9 @@ window.MENU_STRUCTURE = [
     primary: true,
     items: [
       { label: "About this engineer", action: "open", target: "about" },
-      "—",
+      "-",
       { label: "Contact", action: "open", target: "contact" },
-      "—",
+      "-",
       { label: "Hide", action: "noop" },
     ],
   },
@@ -365,7 +365,7 @@ window.MENU_STRUCTURE = [
     items: [
       { label: "New tab · random project", action: "random-project" },
       { label: "Open Spotlight…", action: "spotlight", shortcut: "⌘K" },
-      "—",
+      "-",
       { label: "Close window", action: "close-top", shortcut: "⌘W" },
     ],
   },
@@ -374,7 +374,7 @@ window.MENU_STRUCTURE = [
     items: [
       { label: "Dock magnification", action: "toggle-mag", toggle: "dockMag" },
       { label: "Reduce motion", action: "toggle-motion", toggle: "reducedMotion" },
-      "—",
+      "-",
       { label: "Graphite", action: "set-wallpaper", value: "graphite", radio: "wallpaper" },
       { label: "Sequoia Blue", action: "set-wallpaper", value: "sequoia", radio: "wallpaper" },
       { label: "Sunset", action: "set-wallpaper", value: "sunset", radio: "wallpaper" },

@@ -1,5 +1,5 @@
 /* =========================================================================
-   Yemazar Portfolio — Design Tokens
+   Yemazar Portfolio - Design Tokens
    Cinematic macOS-inspired personal portfolio
    ========================================================================= */
 
@@ -15,17 +15,17 @@
 :root {
   /* ---------- Colors ---------------------------------------------------- */
 
-  /* Base / background — the void behind the fabric video */
+  /* Base / background - the void behind the fabric video */
   --color-bg-base: #050507;
   --color-bg-elevated: #0a0a0c;
 
-  /* Fabric — the silk that the bg video unfolds */
+  /* Fabric - the silk that the bg video unfolds */
   --color-fabric-shadow: #0c0e12;
   --color-fabric-mid: #1c1f25;
   --color-fabric-highlight: rgba(58, 61, 69, 0.4);
   --color-fabric-sheen: rgba(160, 172, 188, 0.18); /* cool grey-blue highlight */
 
-  /* Glass surfaces — windows, dock, menu bar, spotlight */
+  /* Glass surfaces - windows, dock, menu bar, spotlight */
   --color-surface-light: rgba(245, 245, 247, 0.85); /* window body */
   --color-surface-dark: rgba(28, 28, 30, 0.72);     /* dock / menu bar */
   --color-surface-spotlight: rgba(18, 18, 20, 0.62);
@@ -63,8 +63,8 @@
   --font-cursive: "Caveat", "Homemade Apple", "Snell Roundhand", cursive;
 
   /* Type scale */
-  --fs-display: 64px;      /* hero — "hello" cursive intro    48–72 */
-  --fs-h1: 36px;           /* window titles — "Luz Ora"       32–40 */
+  --fs-display: 64px;      /* hero - "hello" cursive intro    48–72 */
+  --fs-h1: 36px;           /* window titles - "Luz Ora"       32–40 */
   --fs-h2: 24px;           /* section headers                 22–28 */
   --fs-body: 16px;         /* body copy                       15–17 */
   --fs-meta: 13px;         /* metadata values, dock tooltips */
@@ -77,7 +77,7 @@
   --lh-body: 1.5;
   --lh-tight: 1.25;
 
-  /* Letter spacing — Apple-style tight tracking on headings */
+  /* Letter spacing - Apple-style tight tracking on headings */
   --ls-display: -0.03em;
   --ls-heading: -0.02em;
   --ls-body: -0.005em;

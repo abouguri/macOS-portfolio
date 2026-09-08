@@ -1,5 +1,5 @@
 // =========================================================================
-// MenuBar.jsx — wired dropdowns, click handlers, real menu actions
+// MenuBar.jsx - wired dropdowns, click handlers, real menu actions
 // =========================================================================
 
 function Switch({ on, onToggle }) {
@@ -100,7 +100,7 @@ function MenuBar({ activeApp, openWindows, onAction, onSpotlight, prefs = {} }) 
     return (
       <div className="mb-dropdown" onMouseDown={(e) => e.stopPropagation()}>
         {items.map((it, i) => {
-          if (it === '—') return <div key={i} className="mb-divider"/>;
+          if (it === '-') return <div key={i} className="mb-divider"/>;
           const checked = it.toggle ? !!prefs[it.toggle] : it.radio ? prefs[it.radio] === it.value : false;
           return (
             <div

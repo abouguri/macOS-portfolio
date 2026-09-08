@@ -1,7 +1,7 @@
 // =========================================================================
-// Dock.jsx — authentic macOS cosine magnification, GPU-smooth
+// Dock.jsx - authentic macOS cosine magnification, GPU-smooth
 //
-// The animation loop writes directly to DOM via iconRefs — no setState
+// The animation loop writes directly to DOM via iconRefs - no setState
 // on every frame. React only re-renders for hover (tooltip) changes.
 // useLayoutEffect sets initial geometry before first paint (no flash).
 // =========================================================================
@@ -63,7 +63,7 @@ function Dock({ apps, onAppClick, openIds = [], magnify = true, minimized = [], 
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // ── Animation loop — pure DOM mutation, zero setState ────────────────
+  // ── Animation loop - pure DOM mutation, zero setState ────────────────
   React.useEffect(() => {
     const n = apps.length;
     const scales = new Float32Array(n).fill(1.0);
@@ -79,7 +79,7 @@ function Dock({ apps, onAppClick, openIds = [], magnify = true, minimized = [], 
 
       let x = 0;
       for (let i = 0; i < n; i++) {
-        // Target scale — cosine curve, based on resting (un-magnified) centers
+        // Target scale - cosine curve, based on resting (un-magnified) centers
         let target = 1.0;
         if (mX !== null) {
           const center = i * (base + spacing) + base / 2;
@@ -183,7 +183,7 @@ function Dock({ apps, onAppClick, openIds = [], magnify = true, minimized = [], 
                 key={app.id}
                 ref={el => { iconRefs.current[i] = el; }}
                 style={{
-                  /* left / width / height intentionally OMITTED from JSX —
+                  /* left / width / height intentionally OMITTED from JSX -
                      the rAF loop owns them; React will never overwrite them. */
                   position: 'absolute',
                   bottom: 0,
@@ -196,7 +196,7 @@ function Dock({ apps, onAppClick, openIds = [], magnify = true, minimized = [], 
                 onMouseEnter={() => setHovered(app.id)}
                 onMouseLeave={() => setHovered(null)}
               >
-                {/* Tooltip — 110% sits above the icon regardless of its magnified size */}
+                {/* Tooltip - 110% sits above the icon regardless of its magnified size */}
                 {isHovered && (
                   <div style={{
                     position: 'absolute',

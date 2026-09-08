@@ -1,5 +1,5 @@
 // =========================================================================
-// DesktopIcon.jsx — draggable desktop icon with contributor badge
+// DesktopIcon.jsx - draggable desktop icon with contributor badge
 // Drag: mousedown → move > 5px → free drag; mouseup → save position
 // Click: first click selects, second click on selected opens
 // Double-click: always opens

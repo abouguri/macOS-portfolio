@@ -1,5 +1,5 @@
 // =========================================================================
-// WindowContent.jsx — content for project / about / contact windows
+// WindowContent.jsx - content for project / about / contact windows
 // =========================================================================
 
 function ExternalIcon() {

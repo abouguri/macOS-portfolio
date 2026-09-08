@@ -1,5 +1,5 @@
 // =========================================================================
-// Window.jsx — single draggable window with traffic-light chrome
+// Window.jsx - single draggable window with traffic-light chrome
 // =========================================================================
 
 function TrafficLights({ onClose, onMinimize, onMaximize }) {

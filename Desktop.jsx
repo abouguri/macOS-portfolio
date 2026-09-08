@@ -1,6 +1,6 @@
 
 // =========================================================================
-// Desktop.jsx — main composer. Owns windows, selection, spotlight, menubar
+// Desktop.jsx - main composer. Owns windows, selection, spotlight, menubar
 // actions. Dock / desktop / spotlight all open through openItem().
 // =========================================================================
 
@@ -168,7 +168,7 @@ function Desktop(props) {
     if (target === 'terminal') {
       openWindow({
         id: 'terminal',
-        title: `${(window.ABOUT && window.ABOUT.handle) || 'guest'} — zsh — 80×24`,
+        title: `${(window.ABOUT && window.ABOUT.handle) || 'guest'} - zsh - 80×24`,
         kind: 'terminal',
         icon: 'assets/icons/dock/terminal.svg',
         size: { w: 700, h: 470 },

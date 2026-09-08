@@ -1,5 +1,5 @@
 // =========================================================================
-// Spotlight.jsx — ⌘K search with grouped results (Projects / Pages / External)
+// Spotlight.jsx - ⌘K search with grouped results (Projects / Pages / External)
 // Searches by name, tagline, type, AND stack tags (so "rabbit" finds
 // Transcendence via "RabbitMQ").
 // =========================================================================
@@ -45,7 +45,7 @@ function Spotlight({ open, onClose, onPick, items, initialFilter }) {
     if (initialFilter === 'project') {
       pool = pool.filter((it) => it.kind === 'project');
     }
-    // Cap generously — .spot-results scrolls, and a low cap silently hides
+    // Cap generously - .spot-results scrolls, and a low cap silently hides
     // projects from the browse view as the list grows.
     if (!q) return pool.slice(0, MAX_RESULTS);
     const needle = q.toLowerCase();
@@ -108,8 +108,8 @@ function Spotlight({ open, onClose, onPick, items, initialFilter }) {
             onKeyDown={onKey}
             placeholder={
               initialFilter === 'project'
-                ? 'Search projects — try "rabbit", "next.js", "C++"…'
-                : 'Search projects, pages, links — try "rabbit"…'
+                ? 'Search projects: try "rabbit", "next.js", "C++"…'
+                : 'Search projects, pages, links: try "rabbit"…'
             }
           />
           <span className="spot-kbd">esc</span>

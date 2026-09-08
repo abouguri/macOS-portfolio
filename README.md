@@ -7,7 +7,7 @@
 It boots. It asks you to log in. Then you get draggable icons, a real
 cosine-magnification dock, resizable windows that minimise into the dock, a
 Finder that browses the projects, a working Terminal, and ⌘K search over the
-tech stack. No build step, no framework CLI, no `node_modules` — just open
+tech stack. No build step, no framework CLI, no `node_modules` - just open
 `index.html`.
 
 </div>
@@ -21,11 +21,11 @@ tech stack. No build step, no framework CLI, no `node_modules` — just open
 - [What it is](#what-it-is)
 - [The pieces](#the-pieces)
   - [Boot and login](#boot-and-login)
-  - [Dock](#dock--cosine-magnification)
-  - [Windows](#windows--stacking-focus-resize-minimise)
-  - [Finder](#finder--browsing-the-projects)
+  - [Dock](#dock-cosine-magnification)
+  - [Windows](#windows-stacking-focus-resize-minimise)
+  - [Finder](#finder-browsing-the-projects)
   - [Terminal](#terminal)
-  - [Spotlight](#spotlight--k)
+  - [Spotlight](#spotlight-k)
   - [Menu bar and Control Center](#menu-bar-and-control-center)
 - [Running it](#running-it)
 - [Project structure](#project-structure)
@@ -51,7 +51,7 @@ JS files you can read top to bottom, and deploying is copying a folder.
 |---|---|
 | **Stack** | React 18 (UMD) · Babel Standalone · vanilla CSS |
 | **Build step** | None |
-| **Dependencies** | None installed — 3 CDN `<script>` tags |
+| **Dependencies** | None installed - 3 CDN `<script>` tags |
 | **Total size** | ~163 KB of source, 460 KB of assets |
 | **Projects** | 14, each one object in `data.js` |
 
@@ -69,7 +69,7 @@ JS files you can read top to bottom, and deploying is copying a folder.
 </table>
 
 A cold load starts on black, fades in an Apple logo, and fills a progress bar
-over about four and a half seconds — with a deliberate stall around 55%, because
+over about four and a half seconds - with a deliberate stall around 55%, because
 real firmware never fills linearly. A soft major chord plays through WebAudio if
 the browser allows it. Click anywhere to skip.
 
@@ -81,7 +81,7 @@ dock rises from the bottom.
 If you would rather not sit through it, `Desktop` takes a `bootMode` prop:
 `full` (default), `login-only`, or `skip`.
 
-### Dock — cosine magnification
+### Dock: cosine magnification
 
 ![Dock magnification](docs/screenshots/dock.png)
 
@@ -92,13 +92,13 @@ every frame to fit them.
 
 The whole animation runs in a `requestAnimationFrame` loop that writes `left` /
 `width` / `height` **directly to the DOM** through refs. React never re-renders
-during the animation — it only re-renders when the hover tooltip changes. Icon
+during the animation - it only re-renders when the hover tooltip changes. Icon
 size, max scale, and falloff width are all computed from viewport size, so the
 dock scales sensibly from phone to ultrawide.
 
 Open windows get a dot under their tile. Clicking bounces the icon.
 
-### Windows — stacking, focus, resize, minimise
+### Windows: stacking, focus, resize, minimise
 
 ![Several windows open](docs/screenshots/windows.png)
 
@@ -114,11 +114,11 @@ window instead of duplicating it.
 Windows also come in three flavours: the Finder browser, a dark Terminal, and
 plain panels for About and Contact.
 
-### Finder — browsing the projects
+### Finder: browsing the projects
 
 ![The Finder project browser](docs/screenshots/finder.png)
 
-Opening a project no longer opens a bare page — it opens a Finder window with a
+Opening a project no longer opens a bare page - it opens a Finder window with a
 sidebar listing every project plus About and Contact. Clicking a row swaps the
 content pane in place and retitles the window, so you can walk the whole
 portfolio without opening every project window. The sidebar runs up under the title
@@ -127,7 +127,7 @@ bar the way real Finder does.
 Each project pane is generated from one data object: role pill (Author /
 Contributor), year, type, stack chip row, screenshots of the project itself, a
 *What it does* / *Why it's interesting* writeup, and CTAs to the repo and the
-live demo. Contributor projects get an extra *My contributions* section — but
+live demo. Contributor projects get an extra *My contributions* section - but
 only once you've actually written it (see [Making it yours](#making-it-yours)).
 
 Screenshots are pulled from each project's own repo, downscaled and served as
@@ -149,12 +149,12 @@ reported.
 The commands that change the desktop reach back through a ref, so the terminal
 always calls the current handlers rather than the ones captured when it mounted.
 
-### Spotlight — ⌘K
+### Spotlight: ⌘K
 
 ![Spotlight search](docs/screenshots/spotlight.png)
 
 Press <kbd>⌘</kbd><kbd>K</kbd> (or <kbd>Ctrl</kbd><kbd>K</kbd>) anywhere. Results
-group into **Projects / Pages / External** and are fully keyboard-driven — arrows
+group into **Projects / Pages / External** and are fully keyboard-driven - arrows
 to move, Enter to open, Esc to dismiss.
 
 The search index covers name, tagline, type, role, **and every stack tag**. So
@@ -172,8 +172,8 @@ The Projects tile in the dock opens the same panel pre-filtered to projects only
 Live clock and date, and dropdowns that work. The app-name slot tracks the
 focused window, exactly like the real thing. The Window menu lists open windows
 and focuses the one you pick; File has a "random project" roll for anyone who
-wants a tour. View carries real preferences — dock magnification, reduced
-motion, and four wallpapers — which tick in place, keep their menu open while
+wants a tour. View carries real preferences - dock magnification, reduced
+motion, and four wallpapers - which tick in place, keep their menu open while
 you set them, and persist to `localStorage`. Escape closes any open menu.
 
 ![Control Center](docs/screenshots/control-center.png)
@@ -184,7 +184,7 @@ Center has Wi-Fi, Bluetooth and Focus tiles plus display and sound sliders. The
 brightness slider genuinely dims the whole page through a fixed veil.
 
 **Other details worth a look:** four wallpapers (graphite, Sequoia blue, sunset,
-forest) built entirely from layered CSS gradients — no image files — which
+forest) built entirely from layered CSS gradients - no image files - which
 parallax against the cursor and respect `prefers-reduced-motion`; rubber-band
 selection across the desktop; and a contributor badge on icons for projects you
 didn't author.
@@ -194,7 +194,7 @@ didn't author.
 ## Running it
 
 There is no build. But `index.html` loads the `.jsx` files over `fetch`, so
-opening it as a `file://` URL will fail CORS — serve the folder:
+opening it as a `file://` URL will fail CORS - serve the folder:
 
 ```bash
 git clone git@github.com:abouguri/macOS-portfolio.git
@@ -238,7 +238,7 @@ Desktop.jsx             Composer. Owns the boot→login→desktop phase, windows
 ├── Spotlight           ⌘K search, grouped + keyboard-driven
 └── Dock                Cosine magnification via rAF, minimised-window tray
 
-colors_and_type.css     Design tokens — colors, type scale, spacing, easing
+colors_and_type.css     Design tokens - colors, type scale, spacing, easing
 portfolio.css           Layout: desktop, windows, dock, menu bar
 portfolio-extras.css    Window content, spotlight, icon states
 realism.css             Boot, login, wallpapers, Finder, Terminal, Control
@@ -264,14 +264,14 @@ Push an object onto `window.PROJECTS`:
 {
   id: "myproject",              // unique; also the window id
   name: "My Project",
-  shortName: "My Proj",         // optional — desktop label only, if the name is long
+  shortName: "My Proj",         // optional - desktop label only, if the name is long
   tagline: "One line that makes someone want to click.",
   role: "Author",               // "Author" or "Contributor"
   year: "2025",
   type: "Systems",              // shown in meta + searchable
   stack: ["Rust", "tokio"],     // chips, and indexed by Spotlight
   repo: "https://github.com/…",
-  live: "https://…",            // optional — adds a "Live demo" CTA
+  live: "https://…",            // optional - adds a "Live demo" CTA
   icon: "assets/icons/projects/myproject.svg",
   position: { x: -200, y: 100 },     // offset from the centre of the desktop
   images: [                          // one or two panels above the writeup
@@ -290,7 +290,7 @@ Push an object onto `window.PROJECTS`:
 ```
 
 `role: "Contributor"` adds a badge to the desktop icon and unlocks a **My
-contributions** section — which stays hidden until you fill in a `contributions`
+contributions** section - which stays hidden until you fill in a `contributions`
 field that doesn't start with `TODO`. That's intentional: an unwritten
 contribution note never ships.
 
@@ -304,7 +304,7 @@ The desktop label is capped at 112px, so anything much past ~15 characters wants
 a `shortName`. The window title always uses the full `name`.
 
 For screenshots, drop WebP files in `assets/screenshots/<project>/`. Panels are
-about 370×200, so downscale to ~900px wide — anything larger is wasted bytes.
+about 370×200, so downscale to ~900px wide - anything larger is wasted bytes.
 `fit: "contain"` suits a wide diagram that shouldn't be cropped; `pos: "top"`
 suits a portrait phone capture, where the top of the screen is the interesting
 part. Give a contained image a light `c` if the image itself has a light
@@ -322,7 +322,7 @@ behind the desktop, and update the initial in `AboutWindowContent`.
 <details>
 <summary><b>Retheme it</b></summary>
 
-`colors_and_type.css` is all CSS custom properties — surfaces, accents, traffic
+`colors_and_type.css` is all CSS custom properties - surfaces, accents, traffic
 lights, the fabric palette, type scale, spacing, easing curves. Change
 `--color-accent` and the whole UI follows. The fabric background itself is four
 stacked gradient layers in `portfolio.css` (`.fabric-conic`, `.fabric-sheen-*`).
@@ -339,7 +339,7 @@ stacked gradient layers in `portfolio.css` (`.fabric-conic`, `.fabric-sheen-*`).
 | `spotlight` | Opens search, optionally pre-filtered (`filter: "project"`) |
 | `link` | Opens `href` in a new tab |
 
-Five tiles is the sweet spot — magnification starts to feel cramped past that.
+Five tiles is the sweet spot - magnification starts to feel cramped past that.
 </details>
 
 ---
@@ -349,7 +349,7 @@ Five tiles is the sweet spot — magnification starts to feel cramped past that.
 **Dock magnification without dropping frames.** The obvious implementation puts
 icon scale in React state and updates it on `mousemove`. That means a full
 reconciliation per frame and visible stutter. Here the rAF loop owns `left`,
-`width`, and `height` and mutates them straight on the DOM nodes — those
+`width`, and `height` and mutates them straight on the DOM nodes - those
 properties are deliberately *omitted* from the JSX so React can never overwrite
 them. `useLayoutEffect` sets the resting geometry before first paint so there's
 no flash of unpositioned icons. Scales are held in a `Float32Array` and eased
@@ -358,7 +358,7 @@ toward their target, which is what gives the dock its weight.
 **Targets are computed from resting positions.** Each icon's distance to the
 cursor uses its *un-magnified* centre, not its current one. Using live positions
 creates a feedback loop where growing icons push their neighbours away from the
-cursor, which shrinks them, which pulls them back — a visible shimmer.
+cursor, which shrinks them, which pulls them back - a visible shimmer.
 
 **Click vs. drag vs. open.** Desktop icons resolve all three from one
 `mousedown`: movement under 5px is a click, past that it's a drag. A click on an
@@ -373,8 +373,8 @@ window logic.
 
 **Resize handles have to live inside the frame.** `.win-root` sets
 `overflow: hidden` to clip content to its rounded corners. Hanging the eight
-handles outside the window on negative offsets — the obvious way to get a grab
-band on the edge — puts them in the clipped region, where they render nothing
+handles outside the window on negative offsets - the obvious way to get a grab
+band on the edge - puts them in the clipped region, where they render nothing
 *and* receive no pointer events, so dragging an edge silently does nothing. They
 sit just inside instead, and the top-left one starts past the traffic lights so
 it can't swallow a close click.
@@ -411,7 +411,7 @@ Honest list, since this is a live project:
 
 - All four contributor projects (Transcendence, IRC Server, minishell, NEO Risk
   Visualizer) still have `TODO` placeholders in their `contributions` field. The
-  UI hides the section until they're written, so nothing looks broken — but
+  UI hides the section until they're written, so nothing looks broken - but
   they're empty.
 - Eight of the fourteen projects have real screenshots; the other six (Enterprise
   Task Manager, TaskManager API, GEObrief, BigQuery ETL, IRC Server, NEO Risk

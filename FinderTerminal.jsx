@@ -1,8 +1,8 @@
 // =========================================================================
-// FinderTerminal.jsx — the Finder-style project browser and the Terminal.
+// FinderTerminal.jsx - the Finder-style project browser and the Terminal.
 // Both are window contents; Desktop mounts them via openItem().
 // =========================================================================
-// Finder-style project browser — sidebar of favorites + all projects,
+// Finder-style project browser - sidebar of favorites + all projects,
 // content pane switches in place like a real Finder window.
 // =========================================================================
 
@@ -44,7 +44,7 @@ function FinderProjectContent({ initialId, onRetitle }) {
 }
 
 // =========================================================================
-// Terminal — types `show tech stack`, then prints the aggregated stack
+// Terminal - types `show tech stack`, then prints the aggregated stack
 // from data.js the way a CLI table would.
 // =========================================================================
 
@@ -183,7 +183,7 @@ function TerminalContent({ onOpenProject, onWallpaper }) {
         const a = window.ABOUT || {};
         print(
           <div>
-            <div className="term-line"><span className="term-key">{a.name}</span> — {a.role}. allegedly.</div>
+            <div className="term-line"><span className="term-key">{a.name}</span> - {a.role}. allegedly.</div>
             <div className="term-line term-dim">{a.school} · {a.location} · forged in the 1337 grind, not a weekend bootcamp</div>
             <div className="term-line" style={{ maxWidth: '58ch' }}>{a.bio}</div>
             <div className="term-line term-dim">tl;dr: touches the metal, still ships. rare combo.</div>

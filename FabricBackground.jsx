@@ -1,5 +1,5 @@
 // =========================================================================
-// FabricBackground.jsx — dark silk background with cursor parallax
+// FabricBackground.jsx - dark silk background with cursor parallax
 // =========================================================================
 
 function FabricBackground({ children, reducedMotion: reducedMotionPref, wallpaper = 'graphite' }) {

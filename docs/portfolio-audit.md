@@ -83,7 +83,7 @@ P1 means fix before treating the site as ready for broad sharing. P2 means the n
 
 ## Findings and completion criteria
 
-### 01 — Responsive desktop layout clips projects
+### 01 - Responsive desktop layout clips projects
 
 **Confirmed.** At 1024px, six icon tiles were outside the viewport horizontally. At 800px, twelve were outside. At 390px, the mobile grid's scroll width was 452px; its fourth column is visibly clipped. The document itself remained 390px wide, so checking only page overflow would miss this failure.
 
@@ -93,7 +93,7 @@ Desktop offsets reach ±560px in `data.js`. The responsive switch is at 768px in
 
 **Done when:** every project is visible or reachable by ordinary scrolling at 320, 390, 768, 800, 1024 and 1440px, including after resizing and restoring saved positions. Validate zoom and text enlargement as well. The portfolio reading view should meet [W3C reflow guidance](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html).
 
-### 02 — Mobile project reading is cramped and obstructed
+### 02 - Mobile project reading is cramped and obstructed
 
 **Confirmed.** On a 390px viewport the Finder sidebar occupies 190px, leaving 198px for content. The seen header alone is about 367px tall. The dock overlaps the bottom of the window. See the [mobile project capture](audit/mobile-project.png).
 
@@ -103,7 +103,7 @@ Desktop offsets reach ±560px in `data.js`. The responsive switch is at 768px in
 
 **Done when:** a phone visitor can open a project with one tap, read its description and reach repo/contact links without horizontal clipping or persistent chrome covering content.
 
-### 03 — Keyboard operation is incomplete
+### 03 - Keyboard operation is incomplete
 
 **Confirmed.** Desktop icons, dock items and top menu triggers expose no tab stops. Finder rows also had zero focusable elements after opening a project. `DesktopIcon.jsx`, `Dock.jsx` and `FinderTerminal.jsx` implement these as pointer-driven `div`s. Some status controls in `MenuBar.jsx` have `role="button"` and `tabIndex`, but lack corresponding Enter/Space behavior; sliders use only mouse events.
 
@@ -113,7 +113,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** keyboard-only visitors can enter, browse, search, open, close, minimize, restore and contact without using a mouse. Test Enter, Space, Tab, Shift+Tab and Escape against [W3C keyboard guidance](https://www.w3.org/WAI/WCAG22/Understanding/keyboard.html).
 
-### 04 — Minimize/restore discards window state
+### 04 - Minimize/restore discards window state
 
 **Confirmed reproduction:** open Quanta → choose Mori in Finder → scroll → minimize → restore. Window title says **Mori**, content says **Quanta**, scroll resets to zero.
 
@@ -123,7 +123,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** minimize/restore preserves selected project, title, icon, scroll, size, maximize state and Terminal history. Add one regression test that changes the Finder selection before minimizing.
 
-### 05 — One live destination is disabled
+### 05 - One live destination is disabled
 
 **Confirmed on the audit date.** `https://taskmanager-api.azurewebsites.net/health` returned **403: Site Disabled**. Quanta, TaskFlow and Mori returned HTTP 200 HTML. See [link evidence](audit/links.json).
 
@@ -131,7 +131,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** every advertised live destination is usable for its stated purpose; unavailable demos have a clear alternative such as source and a recorded walkthrough.
 
-### 06 — Entry ceremony delays the portfolio
+### 06 - Entry ceremony delays the portfolio
 
 **Confirmed behavior; impact is a product hypothesis.** `BootLogin.jsx:45` deliberately waits 4.4 seconds and adds an exit delay, then asks for a password that is not checked. Reload repeats it. No conversion analytics were available to quantify abandonment.
 
@@ -139,7 +139,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** work and contact are available without waiting or typing; the decorative experience is still available by choice.
 
-### 07 — Search moves selection out of view
+### 07 - Search moves selection out of view
 
 **Confirmed.** Open Spotlight and press ArrowDown through the list. LinkedIn became selected at approximately y=1023 while the result viewport ended at y=505; scrollTop remained zero.
 
@@ -149,7 +149,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** arrows keep every selection visible, and Enter opens exactly the visibly selected result for both browse and filtered lists.
 
-### 08 — Assistive-technology semantics and focus need a pass
+### 08 - Assistive-technology semantics and focus need a pass
 
 **Source finding.** Project sections use visual labels instead of section headings. Windows lack a named region/dialog relationship. Spotlight lacks a labelled combobox/listbox relationship, active-descendant state and focus restoration. Opening windows does not move focus into them. Generic “Toggle” labels do not identify which setting they control.
 
@@ -157,7 +157,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** a screen-reader pass can identify current project, navigate its headings, understand search selection, and return to the triggering control after closing. Automated checks alone are insufficient.
 
-### 09 — Reduced motion is partial
+### 09 - Reduced motion is partial
 
 **Confirmed.** With OS reduced-motion emulation, a dock icon still grew from 56px to approximately 89px on hover. `Desktop.jsx` passes only `prefs.dockMag` to Dock. CSS duration overrides do not stop JavaScript geometry updates. FabricBackground reads the OS preference once and does not subscribe to changes.
 
@@ -165,7 +165,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** OS and app settings both prevent magnification and other spatial animation, including when changed during the session.
 
-### 10 — Contrast and type need measured corrections
+### 10 - Contrast and type need measured corrections
 
 **CSS finding, not a full contrast certification.** Metadata/section labels use `#86868b` at 10px; links use `#0a84ff` at 13px; primary buttons use white on that blue. These opaque color pairs do not reach 4.5:1 even against pure white, and should not be assumed safe on the translucent light panels. Blurred/translucent states need separate rendered checks.
 
@@ -173,7 +173,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** ordinary text reaches 4.5:1, qualifying large text reaches 3:1, focus remains visible, and screenshots/labels remain readable on every supported surface.
 
-### 11 — Switching Finder projects keeps old scroll position
+### 11 - Switching Finder projects keeps old scroll position
 
 **Confirmed.** Scrolling Mori to 500px and choosing seen retained scrollTop=500. `FinderTerminal.jsx:12` changes view/title but never resets or restores a per-project scroll position.
 
@@ -181,7 +181,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** choosing a project shows its title and introduction on first visit; any restored position is intentional and tied to that project.
 
-### 12 — Window identity and close actions can target the wrong thing
+### 12 - Window identity and close actions can target the wrong thing
 
 **Source finding.** Switching projects updates the title but leaves the original window ID/icon. Reopening Quanta can therefore focus a window currently showing Mori. Separately, `close-top` and Ctrl/⌘W sort all windows, including minimized ones, whereas the displayed active app is calculated from visible windows.
 
@@ -189,7 +189,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** reopen/focus/close actions consistently refer to the visible content, and minimizing a window cannot cause “Close window” to delete a hidden one instead.
 
-### 13 — Projects cannot be shared or revisited directly
+### 13 - Projects cannot be shared or revisited directly
 
 **Source finding.** Project slugs exist but opening a project does not update location/history. Reload resets to boot; a copied URL cannot point a recruiter to Mori or seen.
 
@@ -197,7 +197,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** copying a project URL, loading it in a new tab, refreshing and using Back all preserve expected navigation. Unknown IDs show a useful fallback.
 
-### 14 — Production delivery compiles JSX in visitors' browsers
+### 14 - Production delivery compiles JSX in visitors' browsers
 
 **Source finding.** `index.html` loads React/ReactDOM development builds plus Babel Standalone, then loads every JSX file through Babel. Failure of one external runtime dependency can leave an empty root. Integrity checks help integrity, not availability.
 
@@ -205,7 +205,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** the deployed page performs no JSX compilation, loads production assets, and has a useful fallback on runtime failure. Measure cold mobile performance before and after with a reproducible profile.
 
-### 15 — Idle animation work is continuous
+### 15 - Idle animation work is continuous
 
 **Confirmed behavior.** A three-second idle sample recorded 360 style recalculations, approximately 64ms of script time and zero layouts. This does not establish a battery-drain estimate, but confirms unnecessary ongoing work.
 
@@ -215,7 +215,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** an idle desktop has no continuous wallpaper/dock updates, while hover and resizing remain smooth. Repeat the same idle measurement to verify the improvement.
 
-### 16 — Search, sharing and failure fallbacks are weak
+### 16 - Search, sharing and failure fallbacks are weak
 
 **Source finding.** Entry HTML has a title and favicon, but no description, social preview metadata, canonical URL or useful static portfolio content. `#root` is empty and there is no `noscript` message. This is a discovery/resilience gap, not proof that all search engines fail to index the site.
 
@@ -223,7 +223,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** link previews identify the engineer and work, the initial HTML contains meaningful portfolio content, and failed JavaScript still leaves project/contact links accessible.
 
-### 17 — Personal contribution evidence is missing
+### 17 - Personal contribution evidence is missing
 
 **Confirmed.** Transcendence, IRC Server, minishell and NEO Risk Visualizer have `TODO` contributions in `data.js`; the UI hides them. Technical descriptions of the overall project do not establish the author's individual work.
 
@@ -231,7 +231,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** all contributor entries distinguish personal work from team scope and every quantitative claim has a source or is clearly labelled as a goal. This requires owner input; do not invent contributions.
 
-### 18 — Screenshot coverage and usefulness are uneven
+### 18 - Screenshot coverage and usefulness are uneven
 
 **Confirmed.** Enterprise Task Manager, TaskManager API, GEObrief, BigQuery ETL, IRC Server and NEO Risk Visualizer use gradient-only image entries. Eight of fourteen projects have real screenshots. Empty panels are visually large without providing evidence.
 
@@ -239,7 +239,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** every visible media panel conveys real project evidence, captions state what it proves, and images can be inspected without cropping away important content.
 
-### 19 — Portfolio source links are misdirected
+### 19 - Portfolio source links are misdirected
 
 **Confirmed in data.** Help → “View portfolio source” (`data.js:392`) and Spotlight → “Portfolio source” (`Desktop.jsx:244`) link to the GitHub profile.
 
@@ -247,7 +247,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** both actions open this repository, while the regular GitHub action still opens the profile.
 
-### 20 — The first screen does not explain the engineer's value
+### 20 - The first screen does not explain the engineer's value
 
 **Product recommendation.** Visitors see fourteen evenly weighted icons, an initial and an account handle. Role and biography are hidden in About. There is no selected work sequence, availability statement or résumé link. The tone is personal, but “when I want pain” and “allergic to messy code” do not tell a hiring visitor which problems this engineer can solve.
 
@@ -255,7 +255,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** a new visitor can identify role, strongest work and contact route without discovering hidden desktop conventions. Validate with a small observed usability session rather than assuming the copy works.
 
-### 21 — Gesture and layout recovery need strengthening
+### 21 - Gesture and layout recovery need strengthening
 
 **Source finding.** Icons, window resizing and sliders rely on mouse events. Saved icon positions are merged without shape/range validation. Icon dragging is not clamped, and there is no reset action. Mouse listeners installed during a gesture are removed on mouseup, not explicitly on unmount/cancellation.
 
@@ -263,7 +263,7 @@ The Ctrl/⌘K search shortcut provides a partial route to projects, but does not
 
 **Done when:** mouse, touch and pen interactions have defined behavior; malformed/off-screen saved positions can be recovered; canceling a gesture leaves no active listeners or stuck state.
 
-### 22 — The design system and documentation have drifted
+### 22 - The design system and documentation have drifted
 
 **Source finding.** Many UI colors, spacing and animation constants bypass `colors_and_type.css`. The token file still names “Yemazar.” Old fabric/intro rules remain beside the current wallpaper/boot implementation. Fonts are requested from both the HTML and a CSS import, although the original cursive intro is no longer mounted. Terminal technology categories are manually maintained.
 
@@ -273,7 +273,7 @@ The README still claims roughly 163KB source/460KB assets and says “just open 
 
 **Done when:** token changes affect the intended components, no unused fonts are fetched, documentation matches a clean checkout, and screenshots are dated or regenerated when UI changes.
 
-### 23 — Verification and deployment checks are not reproducible
+### 23 - Verification and deployment checks are not reproducible
 
 **Repository finding.** There is no package manifest, lockfile, CI workflow or automated regression suite in the portfolio. The screenshot script requires manually installing Playwright. This audit used tooling already present elsewhere on the machine; it is not a clean-checkout test setup.
 
@@ -281,7 +281,7 @@ The README still claims roughly 163KB source/460KB assets and says “just open 
 
 **Done when:** a clean checkout has documented commands that build and exercise the main user journeys in CI, with screenshots or failure evidence. Test behavior, not just implementation details.
 
-### 24 — Simulated system controls compete with the portfolio
+### 24 - Simulated system controls compete with the portfolio
 
 **Source finding; product recommendation.** Battery is fixed at 82%; Wi-Fi/Bluetooth/Focus are simulated; the sound slider changes local state but is not connected to the startup chime. Brightness can dim the whole page substantially. These interactions demonstrate craft but may distract from project discovery.
 
@@ -289,7 +289,7 @@ The README still claims roughly 163KB source/460KB assets and says “just open 
 
 **Done when:** every exposed control has an understandable effect, and visitors can reliably return to a readable default view.
 
-### 25 — Reading, copying and media access need web conventions
+### 25 - Reading, copying and media access need web conventions
 
 **Source finding.** `portfolio.css:13` disables selection across the body; only Terminal explicitly restores it. Project screenshots are CSS background images in `WindowContent.jsx`, so they lack image alternatives, native open/save behavior and loading hints. There is no dedicated print layout.
 

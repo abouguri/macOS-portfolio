@@ -1,11 +1,11 @@
 // =========================================================================
-// BootLogin.jsx — boot screen (Apple logo + progress + chime) then the
+// BootLogin.jsx - boot screen (Apple logo + progress + chime) then the
 // login screen over the blurred wallpaper. Replaces the old "hi" intro.
 // =========================================================================
 
 const APPLE_PATH = "M16.5 1.3c.1 1.5-.5 2.9-1.4 3.9-.9 1-2.4 1.7-3.7 1.6-.2-1.4.5-2.9 1.4-3.8.9-1 2.4-1.7 3.7-1.7zM21 17.7c-.4 1.3-.9 2.4-1.7 3.5-1 1.5-2.4 3.3-4.2 3.3-1.6 0-2-1-4.2-1-2.1 0-2.6 1-4.2 1-1.8 0-3.1-1.6-4.1-3.1-2.8-4.3-3.1-9.4-1.4-12.1 1.2-1.9 3.2-3 5-3 1.6 0 3.1.9 4.1.9 1 0 2.7-1 4.5-.9.8 0 3 .3 4.4 2.4-.1.1-2.6 1.5-2.6 4.5 0 3.6 3.1 4.8 3.1 4.9-.1 0-.2.2-.7.6z";
 
-// Startup chime — a soft synthesized major chord (WebAudio). Browsers may
+// Startup chime - a soft synthesized major chord (WebAudio). Browsers may
 // block audio before the first gesture; we simply try and fail silently.
 function playChime(volume = 1) {
   try {
@@ -78,7 +78,7 @@ function BootSequence({ onDone }) {
   );
 }
 
-// Login avatar — the monkey emoji. Covers his eyes while you type your
+// Login avatar - the monkey emoji. Covers his eyes while you type your
 // password; hover and he peeks out, dances and waves hi.
 function MonkeyAvatar() {
   return (
@@ -127,9 +127,9 @@ function LoginScreen({ onDone }) {
             <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 6 h8 M6.5 2.5 L10 6 L6.5 9.5"/></svg>
           </button>
         </div>
-        <div className="login-hint">Press Enter — any password works here</div>
+        <div className="login-hint">Press Enter. Any password works here.</div>
       </div>
-      <div className="login-bottom">This is a portfolio, not your Mac — log in to browse</div>
+      <div className="login-bottom">This is a portfolio, not your Mac. Log in to browse.</div>
     </div>
   );
 }

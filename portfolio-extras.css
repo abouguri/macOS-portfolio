@@ -1,5 +1,5 @@
 /* =========================================================================
-   Portfolio — extensions for abouguri's content
+   Portfolio - extensions for abouguri's content
    ========================================================================= */
 
 /* Desktop icons positioned relative to viewport center */
@@ -312,7 +312,7 @@
   text-wrap: pretty;
 }
 
-/* === Contact window — Note-style card === */
+/* === Contact window - Note-style card === */
 .cw-root {
   padding: 28px 32px 32px;
   color: #1d1d1f;
@@ -380,7 +380,7 @@
   font-size: 16px;
 }
 
-/* === Spotlight — grouped results === */
+/* === Spotlight - grouped results === */
 .spot-group-label {
   font-size: 10px;
   font-weight: 600;
@@ -416,7 +416,7 @@
 .spot-name-wrap { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .spot-name-line { display: flex; align-items: center; flex-wrap: wrap; }
 
-/* === Menu bar — improved dropdowns === */
+/* === Menu bar - improved dropdowns === */
 .mb-item {
   display: flex;
   align-items: center;

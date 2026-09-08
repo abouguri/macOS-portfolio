@@ -121,7 +121,7 @@ async function moveWindow(p, sel, tx, ty) {
     await ctx.close();
   }
 
-  // finder.png — the project browser
+  // finder.png - the project browser
   {
     const { ctx, p } = await desktop(browser);
     await p.locator('.d-icon', { hasText: 'cub3D' }).first().dblclick();
@@ -150,7 +150,7 @@ async function moveWindow(p, sel, tx, ty) {
     await ctx.close();
   }
 
-  // windows.png — several windows, focus states
+  // windows.png - several windows, focus states
   {
     const { ctx, p } = await desktop(browser);
     await p.locator('.d-icon', { hasText: 'Quanta' }).first().dblclick();
